@@ -20,13 +20,10 @@ export class ProfileGuard implements CanActivate {
         token: this.auth.getUser().token,
         code: '/profile'
       })
-      .then((res: any) => {
-        if (res?.error) {
-          console.log(res.error)
-          this.router.navigate(['/login'])
-        }
+      .catch(() => {
+        this.auth.logout();
+        this.router.navigate(['/login']);
       })
-      .catch(() => this.router.navigate(['/login']))
     return true;
   }
   
