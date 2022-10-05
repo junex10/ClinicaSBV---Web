@@ -1,0 +1,132 @@
+/* VARIABLES */
+:root {
+    --white: #f3f3f3;
+    --black: #242424;
+    --success: #61F2C1;
+    --danger: #c8232c;
+    --info: #2F81BD;
+    --warning: #FECA40;
+    --gray: #424242;
+}
+/* FONTS */
+@font-face {
+    font-family: 'BOLD';
+    src: url('assets/fonts/Montserrat-Bold.ttf');
+}
+@font-face {
+    font-family: 'SEMI-BOLD';
+    src: url('assets/fonts/Montserrat-SemiBold.ttf');
+}
+@font-face {
+    font-family: 'REGULAR';
+    src: url('assets/fonts/Montserrat-Regular.ttf');
+}
+@font-face {
+    font-family: 'MEDIUM';
+    src: url('assets/fonts/Montserrat-Medium.ttf');
+}
+body{
+    overflow-x: hidden;
+    font-family: 'REGULAR';
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-family: 'BOLD';
+}
+.btn-success {
+    background-color: var(--success) !important;
+    font-family: 'BOLD';
+}
+.btn-danger {
+    background-color: var(--danger) !important;
+    font-family: 'BOLD';
+}
+.btn-warning {
+    background-color: var(--warning) !important;
+    font-family: 'BOLD';
+}
+.btn-info {
+    background-color: var(--info) !important;
+    font-family: 'BOLD';
+}
+html, body { height: 100%; }
+
+.text-success {
+    color: var(--success) !important;
+}
+.text-danger {
+    color: var(--danger) !important;
+}
+.text-info {
+    color: var(--info) !important;
+}
+.text-warning {
+    color: var(--warning) !important;
+}
+.danger {
+    background-color: var(--danger);
+}
+.warning {
+    background-color: var(--warning);
+}
+.success {
+    background-color: var(--success);
+}
+.info {
+    background-color: var(--info);
+}
+.mat-button-disabled{
+   font-family: 'REGULAR';
+}
+.line{
+    margin-top: 10px;
+    background-color: black;
+    border: none;
+}
+.box-shadow{
+    box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-webkit-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-moz-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-o-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+}
+/* SWAL */
+.iconSwal{
+    font-size: 60px;
+    color: white;
+}
+.iconBorder{
+    box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-webkit-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-moz-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+	-o-box-shadow: 0 3px 6px 0 rgba(171, 171, 171, .7);
+    padding: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 50%;
+}
+/* DATATABLE */
+
+table thead{
+    border: none;
+}
+table thead tr th{
+    padding: 15px 10px 15px 15px;
+    color: var(--gray);
+    font-weight: 500;
+    font-size: 13px;
+}
+table td {
+    border-top: 1px solid rgba(0,0,0,0.2);
+}
+table th, table td{
+    padding: 14px 18px;
+}
+
+/* PAGINATION */
+.ngx-pagination .ng-star-inserted{
+    border-radius: 25px;
+}

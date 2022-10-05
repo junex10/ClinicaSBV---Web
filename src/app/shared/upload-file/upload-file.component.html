@@ -1,0 +1,20 @@
+<div className="container-paper-clip">
+    <form [formGroup]="form" autocomplete="off">
+        <div class="mt-4 mb-2">
+            <button 
+                type="button"
+                [ngClass]="{'uploading': statusFile === 1, 'uploaded': statusFile === 2 }"
+                class="m-auto d-block" 
+                (click)="fileInput.click()"
+                mat-raised-button
+            >
+                <ng-container *ngIf="statusFile === 0">{{ onText }} </ng-container>
+                <ng-container *ngIf="statusFile === 2">{{ onSuccessText }} </ng-container>
+                <ng-container *ngIf="statusFile === 1">{{ onWaitingText }} </ng-container>
+                <ng-container *ngIf="statusFile != 2; else done"><mat-icon matSuffix>cloud_upload</mat-icon></ng-container>
+                <ng-template #done><mat-icon matSuffix>done</mat-icon></ng-template>
+            </button>
+            <input hidden #fileInput type="file" (change)="onFileSelected()" id="file" formControlName="file">
+        </div>
+    </form>
+</div>

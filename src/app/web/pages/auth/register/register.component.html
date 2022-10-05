@@ -1,0 +1,66 @@
+<div class="image_background">
+    <div class="background_opacity"></div>
+    <div class="row login">
+        <div class="col-md-4 col-lg-4 col-sm-12 col-12 logo_box">
+            <div class="title_login">
+                <img [src]="logo" id="logo">
+            </div>
+        </div>
+        <div class="col-12 form">
+            <form [formGroup]="form" autocomplete="off" (submit)="submit()">
+                <div class="row">
+                    <div class="col-12">
+                        <mat-form-field class="input" appearance="outline">
+                            <mat-label>Correo electrónico</mat-label>
+                            <input matInput formControlName="email" name="email" required type="email">
+                            <mat-icon matSuffix>person</mat-icon>
+                            <mat-error
+                                *ngIf="form.controls['email'].errors?.required && form.controls['email'].touched">Correo
+                                requerido</mat-error>
+                            <mat-hint class="text-success"
+                                *ngIf="form.controls['email'].valid && form.controls['email'].touched">Correo verificado
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <mat-form-field class="input" appearance="outline">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput formControlName="password" name="password" required [type]="visibility">
+                            <mat-icon matSuffix (click)="switchVisibility('password')">visibility</mat-icon>
+                            <mat-error
+                                *ngIf="form.controls['password'].errors?.required && form.controls['password'].touched">
+                                Contraseña requerida</mat-error>
+                            <mat-error
+                                *ngIf="form.controls['password'].errors?.minLength && form.controls['password'].touched">
+                                Requiere minimo 6 caracteres</mat-error>
+                            <mat-hint class="text-success"
+                                *ngIf="form.controls['password'].valid && form.controls['password'].touched">Contraseña
+                                verificada</mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <mat-form-field class="input" appearance="outline">
+                            <mat-label>Confirmar Contraseña</mat-label>
+                            <input matInput formControlName="password_confirmation" name="password_confirmation" required [type]="visibility_confirm">
+                            <mat-icon matSuffix (click)="switchVisibility('confirm_password')">visibility</mat-icon>
+                            <mat-error
+                                *ngIf="form.controls['password_confirmation'].errors">
+                                La contraseñas deben ser iguales</mat-error>
+                            <mat-hint class="text-success"
+                                *ngIf="form.controls['password_confirmation'].valid && form.controls['password_confirmation'].touched">Confirmacion de contraseña
+                                verificada</mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <a class="optionsText text-success" href="login">
+                            ¿Ya tiene cuenta? Iniciar sesión
+                        </a>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button mat-raised-button class="button btn-success" [disabled]="form.invalid">Registrarse</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

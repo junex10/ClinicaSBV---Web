@@ -1,0 +1,45 @@
+<div class="header">
+    <div class="row">
+        <div class="menu sidebar box-shadow col-2" [ngStyle]="{'padding': 0}" *ngIf="showMenu">
+            <div>
+                <i (click)="openMenu()"
+                class="fa-solid fa-arrow-right-from-bracket iconMenu" 
+                [ngStyle]="{'display': 'flex', 'justify-content': 'flex-end', 'margin': '20px'}"></i>
+            </div>
+            <nav class='animated bounceInDown'>
+                <ul [ngStyle]="{'padding-left': '15px'}">
+                    <li class='sub-menu' *ngFor="let m of menu">
+                        <ng-container *ngIf="m.multiple">
+                            <a [ngClass]="{'selected': m.selected}" [ngStyle]="{'cursor': 'pointer'}" (click)="m.selected = m.selected ? false : true">
+                                <i [class]="m.icon" [ngClass]="{'menuItemBlack': m.selected, 'menuItem': !m.selected}" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i> <span [ngClass]="{'menuItemBlack': m.selected}" class="menuItem">{{ m.name }}</span>
+                                <div class='fa fa-caret-down right iconDown' [ngClass]="{'menuItemBlack': m.selected}"></div>
+                            </a>
+                            <ng-container *ngIf="m.selected">
+                                <ul *ngFor="let subM of m.subMenu">
+                                    <li [ngStyle]="{'cursor': 'pointer'}" [routerLink]="subM.route">
+                                        <a><i [class]="subM.icon" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i><span class="menuItem">{{ subM.name }}</span></a>
+                                    </li>
+                                </ul>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!m.multiple">
+                            <a [ngStyle]="{'cursor': 'pointer'}" (click)="action(m.action)">
+                                <i [class]="m.icon" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i> <span class="menuItem">{{ m.name }}</span>
+                            </a>
+                        </ng-container>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-12">
+            <div class="menu box-shadow row options-box">
+                <div class="col-10 col-lg-11 col-md-11" *ngIf="!showMenu" (click)="openMenu()">
+                    <i class="fa-solid fa-bars iconMenu"></i>
+                </div>
+                <div class="col-2 col-lg-1 col-md-1 user-box">
+                    <img class="user" [src]="user.photo ?? 'assets/img/user.png'">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

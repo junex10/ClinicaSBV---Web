@@ -1,0 +1,17 @@
+.container {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+}
+
+.content {
+    text-align: center;
+    display: inline-block;
+}
+
+.title {
+    font-size: 72px;
+    margin-bottom: 40px;
+}

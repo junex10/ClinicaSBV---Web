@@ -1,0 +1,6 @@
+.cdk-overlay-container{
+    z-index: 2000 !important;
+}
+.mat-datepicker-content .mat-calendar-body tr {
+    border: 2px solid rgba(0,0,0,0) !important;
+}

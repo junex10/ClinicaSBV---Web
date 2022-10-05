@@ -1,0 +1,12 @@
+table {
+    width: 100%;
+    background-color: white;
+}
+.pagination{
+    margin-top: 20px;
+}
+.notFoundText{
+    text-align: center;
+    position: relative;
+    top: 40%;
+}

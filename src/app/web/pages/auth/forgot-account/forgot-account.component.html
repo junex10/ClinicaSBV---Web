@@ -1,0 +1,88 @@
+<div className="container-form">
+    <img [src]="logo" id="logo">
+    <form className="row box-shadow" [formGroup]="form" autocomplete="off" (submit)="submit()">
+        <div class="row">
+            <ng-container *ngIf="step === 1">
+                <div className="col-12">
+                    <p>Correo electrónico</p>
+                </div>
+                <div className="col-md-12">
+                    <mat-form-field class="input" appearance="outline">
+                        <mat-label>Correo electrónico</mat-label>
+                        <input matInput formControlName="email" name="email" required type="email">
+                        <mat-icon matSuffix>person</mat-icon>
+                        <mat-error *ngIf="form.controls['email'].errors?.required && form.controls['email'].touched">
+                            Correo
+                            requerido</mat-error>
+                        <mat-hint class="text-success"
+                            *ngIf="form.controls['email'].valid && form.controls['email'].touched">Correo válido
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div className="col-md-12 text-center">
+                    <button type="button" (click)="authEmail()" mat-raised-button class="button btn-success btn-block"
+                        [disabled]="!form.controls['email'].valid">
+                        Siguiente
+                    </button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="step === 2">
+                <div className="col-12">
+                    <p>Código</p>
+                </div>
+                <div className="col-md-12">
+                    <div class="otp mb-4">
+                        <ng-otp-input (onInputChange)="otpChange($event)" [config]="{length:6}"></ng-otp-input>
+                    </div>
+                </div>
+                <div className="col-md-12 text-center">
+                    <button type="button" (click)="sendOtp()" mat-raised-button class="button btn-success btn-block"
+                        [disabled]="!form.controls['code'].valid">
+                        Enviar
+                    </button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="step === 3">
+                <div className="col-12">
+                    <p>Nueva contraseña</p>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-4">
+                    <mat-form-field class="input" appearance="outline">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput formControlName="password" name="password" required [type]="visibility">
+                        <mat-icon matSuffix (click)="switchVisibility('password')">visibility</mat-icon>
+                        <mat-error
+                            *ngIf="form.controls['password'].errors?.required && form.controls['password'].touched">
+                            Contraseña requerida</mat-error>
+                        <mat-error
+                            *ngIf="form.controls['password'].errors?.minLength && form.controls['password'].touched">
+                            Requiere minimo 6 caracteres</mat-error>
+                        <mat-hint class="text-success"
+                            *ngIf="form.controls['password'].valid && form.controls['password'].touched">Contraseña
+                            verificada</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-4">
+                    <mat-form-field class="input" appearance="outline">
+                        <mat-label>Confirmar Contraseña</mat-label>
+                        <input matInput formControlName="password_confirmation" name="password_confirmation" required
+                            [type]="visibility_confirm">
+                        <mat-icon matSuffix (click)="switchVisibility('confirm_password')">visibility</mat-icon>
+                        <mat-error *ngIf="form.controls['password_confirmation'].errors">
+                            La contraseñas deben ser iguales</mat-error>
+                        <mat-hint class="text-success"
+                            *ngIf="form.controls['password_confirmation'].valid && form.controls['password_confirmation'].touched">
+                            Confirmacion de contraseña
+                            verificada</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div className="col-md-12 text-center">
+                    <button type="submit" mat-raised-button class="button btn-success btn-block"
+                        [disabled]="!form.valid">
+                        Enviar
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+    </form>
+</div>
