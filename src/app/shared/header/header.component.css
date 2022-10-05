@@ -22,6 +22,7 @@
     margin-left: 35px;
     margin-bottom: 15px;
     cursor: pointer;
+    color: var(--white);
 }
 .logo{
     width: 100%;
