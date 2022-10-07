@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.auth.getUser()?.user;
-    this.user.photo = `${ENVIRONMENT.storage}${this.user.photo}`;
+    this.user.photo = this.user.photo !== null ? `${ENVIRONMENT.storage}${this.user.photo}` : 'assets/img/user.png';
   }
 
   openMenu = () => this.showMenu = this.showMenu ? false : true;

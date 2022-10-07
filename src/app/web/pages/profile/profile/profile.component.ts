@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit {
 
   load = (page: any = 1) => {
     this.user = this.auth.getUser()?.user;
-    this.user.photo = `${ENVIRONMENT.storage}${this.user.photo}`;
+    this.user.photo = this.user.photo !== null ? `${ENVIRONMENT.storage}${this.user.photo}` : 'assets/img/user.png';
 
     this.form.get('email')?.setValue(this.user.email);
     this.form.get('name')?.setValue(this.user.person.name);
