@@ -15,7 +15,8 @@ import {
 // Resources
 import {
     GetUserDTO,
-    ResetParamsDTO
+    ResetParamsDTO,
+    GetAssociatedDTO
 } from './resources/auth.dto';
 
 export {
@@ -27,5 +28,6 @@ export {
     // Resources
     GetUserDTO,
     ResetParamsDTO,
-    UpdateUserDTO
+    UpdateUserDTO,
+    GetAssociatedDTO
 };

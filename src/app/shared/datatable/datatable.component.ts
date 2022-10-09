@@ -20,6 +20,7 @@ export class DatatableComponent implements OnChanges {
   @Input('notFoundText') notFoundText: string = 'No hay datos por mostrar';
   @Input('thStyles') thStyles: any = '';
   @Input('thItemsStyles') thItemsStyles: any = '';
+  @Input('id') id: string = 'datatable';
 
   @Output() next = new EventEmitter<number>();
   @Output() toolActionsEvent = new EventEmitter<any>();

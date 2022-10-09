@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService, PetitionService, ProfileService } from 'src/app/services';
+import { Router } from '@angular/router';
+import { AssociatesService, AuthService, PetitionService, ProfileService } from 'src/app/services';
 import Swal from 'sweetalert2';
 import {
+  Constants,
   SwalAlerts
 } from 'src/app/shared';
 import * as moment from 'moment';
@@ -37,11 +39,22 @@ export class ProfileComponent implements OnInit {
     size: 'xl'
   };
 
+  patient: boolean = false;
+
+  associate = {
+    data: <any>[],
+    page: 1,
+    total: 0,
+    header: ['#', 'Nombre', 'Apellido', 'Edad', 'Opciones']
+  }
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private petition: PetitionService,
-    private profile: ProfileService
+    private profile: ProfileService,
+    private router: Router,
+    private associates: AssociatesService
   ) { 
     this.form = this.fb.group({
       email: [null, [
@@ -65,6 +78,7 @@ export class ProfileComponent implements OnInit {
   load = (page: any = 1) => {
     this.user = this.auth.getUser()?.user;
     this.user.photo = this.user.photo !== null ? `${ENVIRONMENT.storage}${this.user.photo}` : 'assets/img/user.png';
+    this.patient = this.user.level.id === Constants.LEVELS.PATIENT && true;
 
     this.form.get('email')?.setValue(this.user.email);
     this.form.get('name')?.setValue(this.user.person.name);
@@ -77,20 +91,70 @@ export class ProfileComponent implements OnInit {
 
     this.petition.getPetitions(page).subscribe(
       (item) => {
-        const addTools = item.data.petitions.map((value: any) => (
-          { ...value, tools: [
-            {
-              icon: 'visibility',
-              action: 'showDetails()'
-            }
-          ] }
-        ));
-        this.data = addTools;
-        this.total = item.data.count;
+        if (item.data !== null) {
+          const addTools = item.data.petitions.map((value: any) => (
+            { ...value, tools: [
+              {
+                icon: 'visibility',
+                action: 'showDetails()'
+              }
+            ] }
+          ));
+          this.data = addTools;
+          this.total = item.data.count;
+        }
+      }
+    )
+    this.associates.getAll(this.user.id, this.associate.page).then(
+      (item) => {
+        const data = item.rows.map(value => (
+          {
+            id: value.id,
+            name: value.person?.name,
+            lastname: value.person?.lastname,
+            age: value.person?.age,
+            tools: [
+              {
+                icon: 'visibility',
+                action: 'showAssociated()'
+              }
+            ]
+          }
+        ))
+        this.associate = {
+          ...this.associate,
+          data,
+          total: item.count
+        }
       }
     )
   }
   next = (page: number) => this.load(page);
+  nextAssociated = (page: number) => {
+    this.associates.getAll(this.user.id, page).then(
+      (item) => {
+        const data = item.rows.map(value => (
+          {
+            id: value.id,
+            name: value.person?.name,
+            lastname: value.person?.lastname,
+            age: value.person?.age,
+            tools: [
+              {
+                icon: 'visibility',
+                action: 'showAssociated()'
+              }
+            ]
+          }
+        ))
+        this.associate = {
+          ...this.associate,
+          data,
+          total: item.count
+        }
+      }
+    )
+  }
 
   openEdit = () => this.openEditModal = true;
 
@@ -135,6 +199,8 @@ export class ProfileComponent implements OnInit {
     this.userImage = file.base64;
     this.form.get('photo')?.setValue(file.blob);
   }
+
+  addAssociated = () => this.router.navigate(['/profile/add-associated']);
 
   get email() { return this.form.get('email')?.value }
   get name() { return this.form.get('name')?.value }

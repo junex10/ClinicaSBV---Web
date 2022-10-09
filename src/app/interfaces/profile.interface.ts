@@ -1,5 +1,5 @@
-import { UpdateUserDTO } from "../dtos";
+import { GetUserDTO } from "../dtos";
 
 export interface IPROFILE {
-    updateUser(body: UpdateUserDTO): any;
+    updateUser(body: any): Promise<GetUserDTO>;
 }

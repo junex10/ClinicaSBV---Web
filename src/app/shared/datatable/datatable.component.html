@@ -1,4 +1,4 @@
-<table datatable [dtOptions]="dtOptions" class="row-border hover box-shadow">
+<table datatable [dtOptions]="dtOptions" class="row-border hover box-shadow" >
    <ng-container *ngIf="data.length > 0">
         <thead [ngStyle]="thStyles">
             <tr>
@@ -27,9 +27,11 @@
 <ng-container *ngIf="data.length > 0">
     <div class="pagination">
         <pagination-controls 
+            [id]="id"
             [previousLabel]="'Anterior'"
             [nextLabel]="'Siguiente'" 
             (pageChange)="pageChange($event)">
+
         </pagination-controls>
     </div>
 </ng-container>
