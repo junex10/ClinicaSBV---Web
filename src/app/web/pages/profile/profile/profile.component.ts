@@ -201,6 +201,7 @@ export class ProfileComponent implements OnInit {
   }
 
   addAssociated = () => this.router.navigate(['/profile/add-associated']);
+  showAssociated = () => this.router.navigate(['/profile/associated-details']);
 
   get email() { return this.form.get('email')?.value }
   get name() { return this.form.get('name')?.value }

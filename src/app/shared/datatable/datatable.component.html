@@ -6,7 +6,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of data | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: total }">
+            <tr *ngFor="let item of data | paginate: { itemsPerPage: perPage, currentPage: page, totalItems: total, id: id }">
                 <td *ngFor="let i of item | keyvalue: originalOrder">
                     <ng-container *ngIf="i.key !== 'tools'">
                         {{ i.value }}
@@ -26,8 +26,9 @@
 </div>
 <ng-container *ngIf="data.length > 0">
     <div class="pagination">
-        <pagination-controls 
+        <pagination-controls
             [id]="id"
+            [responsive]=true
             [previousLabel]="'Anterior'"
             [nextLabel]="'Siguiente'" 
             (pageChange)="pageChange($event)">
