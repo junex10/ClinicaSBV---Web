@@ -2,6 +2,9 @@ export interface GetUserDTO {
     token: string;
     user: User;
 }
+export interface Associated {
+    user: GetDataAssociatedDTO;
+}
 interface User {
     id: number;
     email: string;
@@ -37,7 +40,7 @@ export interface GetAssociatedDTO {
     count: number;
     rows: User[];
 }
-export interface Associated {
+export interface GetDataAssociatedDTO {
     id: number;
     email: string;
     level_id?: number;

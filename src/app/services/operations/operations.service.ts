@@ -14,5 +14,5 @@ export class OperationService {
 
   save = (data: OperationDTO) => window.localStorage.setItem('operation', JSON.stringify(data))
   delete = () => window.localStorage.removeItem('operation')
-  get = () => JSON.parse(window.localStorage.getItem('operation') || JSON.stringify(''));
+  get = (): OperationDTO => JSON.parse(window.localStorage.getItem('operation') || JSON.stringify(''));
 }

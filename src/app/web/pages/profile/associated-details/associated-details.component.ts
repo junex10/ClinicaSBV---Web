@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common'
 import {
   Constants,
   SwalAlerts
 } from 'src/app/shared';
-import { AssociatesService, AuthService } from 'src/app/services';
+import { AssociatesService } from 'src/app/services';
+import { OperationService } from 'src/app/services';
+import { ENVIRONMENT } from 'src/app/shared';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-associated-details',
@@ -17,14 +21,13 @@ export class AssociatedDetailsComponent implements OnInit {
 
   form: FormGroup;
   userImage: string = 'assets/img/user.png';
-  user: any;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
     private associates: AssociatesService,
     private route: Router,
-    private activatedRoute: ActivatedRoute
+    private operation: OperationService,
+    private location: Location
   ) { 
     this.form = this.fb.group({
       email: [null, [
@@ -39,18 +42,42 @@ export class AssociatedDetailsComponent implements OnInit {
       photo: [null],
       associated_id: [null]
     });
-    this.user = this.route.getCurrentNavigation()?.extras.state?.associated;
-    console.log(this.user)
+    const data = this.route.getCurrentNavigation()?.extras.state?.associated;
+    if (data !== undefined) {
+      this.operation.save({ module: 'associated-details', data: { id: data?.id } });
+      this.getAssociated(data?.id);
+    } else {
+      const associated_id = this.operation.get();
+      this.getAssociated(associated_id.data?.id);
+    }
   }
 
   ngOnInit(): void {
-    //console.log(this.route.getCurrentNavigation()?.extras.state)
+    
+  }
+
+  getAssociated = (id: number) => {
+    this.associates.getAssociated(id).subscribe(
+      (data) => {
+        const user = data.user;
+        this.setValueForm('email', user.email);
+        this.setValueForm('name', user.person.name);
+        this.setValueForm('lastname', user.person.lastname);
+        this.setValueForm('phone', user.person.phone);
+        this.setValueForm('address', user.person.address);
+        this.setValueForm('birthdate', moment(user.person.birthdate).format('YYYY-MM-DD'));
+        this.setValueForm('photo', user.photo !== null ? `${ENVIRONMENT.storage}${user.photo}` : this.userImage);
+      },
+      () => this.location.back()
+    )
   }
 
   onImage = (file: any) => {
     this.userImage = file.base64;
     this.form.get('photo')?.setValue(file.blob);
   }
+
+ private setValueForm = (field: string, value?: string) => this.form.get(field)?.setValue(value);
 
   submit = () => {
     if (this.form.invalid) {
