@@ -71,10 +71,10 @@
     <app-show-details>
         <div class="row">
             <div class="col-12 col-lg-6">
-                <b>Proceso:</b> {{ petitionSelected.process }}
+                <b>Proceso:</b> {{ itemSelected.process }}
             </div>
             <div class="col-12 col-lg-6">
-                <b>Fecha:</b> {{ moment(petitionSelected.date).format('DD/MM/YYYY') }}
+                <b>Fecha:</b> {{ moment(itemSelected.date).format('DD/MM/YYYY') }}
             </div>
         </div>
     </app-show-details>
@@ -188,10 +188,10 @@
                                     <div class="card-body p-3">
                                         <app-table
                                             [id]="'asociados'"
-                                            [header]="associate.header"
-                                            [data]="associate.data"
-                                            [total]="associate.total"
-                                            (next)="nextAssociated($event)"
+                                            [header]="associateList.header"
+                                            [data]="associateList.data"
+                                            [total]="associateList.total"
+                                            (next)="getAssociates(user.id, $event)"
                                             (toolActionsEvent)="receivedTools($event)"
                                             [thStyles]="{'background': 'var(--danger)'}"
                                             [thItemsStyles]="{'font-weight': 'bold', 'color': 'white'}"

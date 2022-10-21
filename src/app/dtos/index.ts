@@ -12,11 +12,20 @@ import {
     UpdateUserDTO
 } from './request/profile.dto';
 
-// Resources
+// Operations
+
+import {
+    OperationDTO
+} from './request/operations.dto';
+
+// Resources 
+
+// Auth
 import {
     GetUserDTO,
     ResetParamsDTO,
-    GetAssociatedDTO
+    GetAssociatedDTO,
+    Associated
 } from './resources/auth.dto';
 
 export {
@@ -24,10 +33,12 @@ export {
     LoginDTO,
     RegisterParamsDTO,
     CheckPermissionDTO,
+    OperationDTO,
 
     // Resources
     GetUserDTO,
     ResetParamsDTO,
     UpdateUserDTO,
-    GetAssociatedDTO
+    GetAssociatedDTO,
+    Associated
 };

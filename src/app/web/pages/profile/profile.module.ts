@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProfileGuard } from 'src/app/guards';
 import { AddAssociatedComponent } from './add-associated/add-associated.component';
 import { ShowDetailsComponent } from './profile/show-details/show-details.component';
+import { AssociatedDetailsComponent } from './associated-details/associated-details.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
     path: 'profile/add-associated',
     component: AddAssociatedComponent,
     canActivate: [ProfileGuard]
+  },
+  {
+    path: 'profile/associated-details',
+    component: AssociatedDetailsComponent,
+    canActivate: [ProfileGuard]
   }
 ]
 
@@ -26,7 +32,8 @@ const routes: Routes = [
   declarations: [
     ProfileComponent,
     AddAssociatedComponent,
-    ShowDetailsComponent
+    ShowDetailsComponent,
+    AssociatedDetailsComponent
   ],
   imports: [
     RouterModule.forChild(routes),

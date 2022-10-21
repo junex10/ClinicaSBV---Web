@@ -10,6 +10,7 @@ import {
 } from 'src/app/shared';
 import * as moment from 'moment';
 import { ENVIRONMENT } from 'src/app/shared';
+import { GetAssociatedDTO } from 'src/app/dtos';
 
 @Component({
   selector: 'app-profile',
@@ -31,7 +32,7 @@ export class ProfileComponent implements OnInit {
   openEditModal: boolean = false;
   openDetails: boolean = false;
 
-  petitionSelected: any = {};
+  itemSelected: any = {};
 
   userImage: string = 'assets/img/user.png';
 
@@ -41,8 +42,8 @@ export class ProfileComponent implements OnInit {
 
   patient: boolean = false;
 
-  associate = {
-    data: <any>[],
+  associateList = {
+    data: <GetAssociatedDTO | any>[],
     page: 1,
     total: 0,
     header: ['#', 'Nombre', 'Apellido', 'Edad', 'Opciones']
@@ -105,33 +106,11 @@ export class ProfileComponent implements OnInit {
         }
       }
     )
-    this.associates.getAll(this.user.id, this.associate.page).then(
-      (item) => {
-        const data = item.rows.map(value => (
-          {
-            id: value.id,
-            name: value.person?.name,
-            lastname: value.person?.lastname,
-            age: value.person?.age,
-            tools: [
-              {
-                icon: 'visibility',
-                action: 'showAssociated()'
-              }
-            ]
-          }
-        ))
-        this.associate = {
-          ...this.associate,
-          data,
-          total: item.count
-        }
-      }
-    )
+    this.getAssociates(this.user.id, this.associateList.page);
   }
   next = (page: number) => this.load(page);
-  nextAssociated = (page: number) => {
-    this.associates.getAll(this.user.id, page).then(
+  getAssociates = (id: number, page: number) => {
+    this.associates.getAll(id, page).then(
       (item) => {
         const data = item.rows.map(value => (
           {
@@ -147,8 +126,8 @@ export class ProfileComponent implements OnInit {
             ]
           }
         ))
-        this.associate = {
-          ...this.associate,
+        this.associateList = {
+          ...this.associateList,
           data,
           total: item.count
         }
@@ -191,7 +170,7 @@ export class ProfileComponent implements OnInit {
   showDetails = () => this.openDetails = true;
 
   receivedTools = ($function: any) => {
-    this.petitionSelected = $function;
+    this.itemSelected = $function;
     eval(`this.${$function.action}`);
   }
 
@@ -201,7 +180,7 @@ export class ProfileComponent implements OnInit {
   }
 
   addAssociated = () => this.router.navigate(['/profile/add-associated']);
-  showAssociated = () => this.router.navigate(['/profile/associated-details']);
+  showAssociated = () => this.router.navigate(['/profile/associated-details'], { state: { associated: this.itemSelected } });
 
   get email() { return this.form.get('email')?.value }
   get name() { return this.form.get('name')?.value }

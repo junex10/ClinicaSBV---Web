@@ -37,3 +37,12 @@ export interface GetAssociatedDTO {
     count: number;
     rows: User[];
 }
+export interface Associated {
+    id: number;
+    email: string;
+    level_id?: number;
+    photo?: string;
+    verified?: number;
+    status?: number;
+    person: Person;
+}
