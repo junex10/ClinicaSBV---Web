@@ -1,4 +1,5 @@
 import { Component, Input, ViewEncapsulation, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Constants } from 'src/app/shared';
 
 @Component({
@@ -25,32 +26,43 @@ export class DatatableComponent implements OnChanges {
   @Output() next = new EventEmitter<number>();
   @Output() toolActionsEvent = new EventEmitter<any>();
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = { 
+    order: [], 
+    processing: false, 
+    data: [], 
+    searching: false,
+    paging: false,
+    info: false,
+    language: {
+      emptyTable: '',
+      zeroRecords: ' '
+    },
+    lengthChange: false,
+    ordering: false
+  };
 
   constructor() { 
-    this.dtOptions = {
-      pageLength: Constants.PER_PAGE_WEB,
-      responsive: true,
-      pagingType: 'numbers',
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ Elementos",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-      }
-    }
+    
   }
 
   ngOnChanges(): void {
     setTimeout(() => {
       this.dtOptions = {
-        ...this.dtOptions,
+        pageLength: Constants.PER_PAGE_WEB || 0,
+        responsive: true,
+        data: this.data,
+        language: {
+          processing: "Procesando...",
+          search: "Buscar:",
+          lengthMenu: "Mostrar _MENU_ Elementos",
+          info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+          infoEmpty: "Mostrando ningún elemento.",
+          infoFiltered: "(filtrado _MAX_ elementos total)",
+          infoPostFix: "",
+          loadingRecords: "Cargando registros...",
+          zeroRecords: "No se encontraron registros",
+          emptyTable: "No hay datos disponibles en la tabla",
+        },
         ...this.options,
         ...this.language
       }
