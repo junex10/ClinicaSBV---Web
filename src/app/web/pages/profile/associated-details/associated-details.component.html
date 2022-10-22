@@ -16,7 +16,7 @@
             <form [formGroup]="form" autocomplete="off" (submit)="submit()">
                 <div class="row pt-4">
                     <div class="col-12">
-                        <img class="user d-block m-auto" [src]="photo">
+                        <img class="user d-block m-auto" [src]="userImage">
                         <app-upload-file (file)="onImage($event)"></app-upload-file>
                     </div>
                     <div class="card-body p-3">

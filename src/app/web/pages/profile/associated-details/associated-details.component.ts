@@ -30,6 +30,7 @@ export class AssociatedDetailsComponent implements OnInit {
     private location: Location
   ) { 
     this.form = this.fb.group({
+      user_id: [null, Validators.required],
       email: [null, [
         Validators.required,
         Validators.email
@@ -60,13 +61,17 @@ export class AssociatedDetailsComponent implements OnInit {
     this.associates.getAssociated(id).subscribe(
       (data) => {
         const user = data.user;
+        const photo = user.photo !== null ? `${ENVIRONMENT.storage}${user.photo}` : this.userImage;
+
+        this.setValueForm('user_id', user.id.toString());
         this.setValueForm('email', user.email);
         this.setValueForm('name', user.person.name);
         this.setValueForm('lastname', user.person.lastname);
         this.setValueForm('phone', user.person.phone);
         this.setValueForm('address', user.person.address);
         this.setValueForm('birthdate', moment(user.person.birthdate).format('YYYY-MM-DD'));
-        this.setValueForm('photo', user.photo !== null ? `${ENVIRONMENT.storage}${user.photo}` : this.userImage);
+        this.setValueForm('photo', photo);
+        this.userImage = photo;
       },
       () => this.location.back()
     )
@@ -95,12 +100,13 @@ export class AssociatedDetailsComponent implements OnInit {
       ));
       return;
     } else {
-      this.associates.addAssociated({
+      this.associates.modifyAssociated({
         ...this.form.value,
         formData: true
       })
-      .then(() => {
-        Swal.fire(SwalAlerts.swalSuccess('Agregado', 'Asociado agregado!'));
+      .subscribe(() => {
+        Swal.fire(SwalAlerts.swalSuccess('', 'Asociado modificado!'));
+        this.operation.delete();
         this.route.navigate(['/profile'])
       });
     }

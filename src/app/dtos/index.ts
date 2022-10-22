@@ -18,6 +18,12 @@ import {
     OperationDTO
 } from './request/operations.dto';
 
+// Associates
+
+import {
+    ModifyAssociatedDTO
+} from './request/associates.dto';
+
 // Resources 
 
 // Auth
@@ -34,6 +40,7 @@ export {
     RegisterParamsDTO,
     CheckPermissionDTO,
     OperationDTO,
+    ModifyAssociatedDTO,
 
     // Resources
     GetUserDTO,
