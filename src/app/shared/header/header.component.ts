@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { GetUserDTO } from 'src/app/dtos';
 import { AuthService } from 'src/app/services';
-import { ENVIRONMENT } from 'src/app/shared';
+import { ENVIRONMENT, MENU } from 'src/app/shared';
 
 @Component({
   selector: 'app-header',
@@ -14,28 +14,7 @@ export class HeaderComponent implements OnInit {
   showMenu: boolean = false;
   user: GetUserDTO | any = '';
 
-  menu = [
-    {
-      name: 'Perfil',
-      icon: "fa-solid fa-user",
-      selected: false,
-      multiple: true,
-      subMenu: [
-        {
-          name: 'Perfil',
-          icon: "fa-solid fa-user",
-          route: '/profile'
-        }
-      ],
-    },
-    {
-      name: 'Salir',
-      icon: 'fa-solid fa-arrow-right-from-bracket',
-      selected: false,
-      multiple: false,
-      action: 'logout()'
-    }
-  ];
+  menu: any = [];
 
   constructor(
     private route: Router,
@@ -45,6 +24,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.auth.getUser()?.user;
     this.user.photo = this.user.photo !== null ? `${ENVIRONMENT.storage}${this.user.photo}` : 'assets/img/user.png';
+    const menu = MENU.find(item => item.LEVEL === this.user.level.id);
+    this.menu = menu?.MENU;
   }
 
   openMenu = () => this.showMenu = this.showMenu ? false : true;

@@ -1,5 +1,5 @@
 // Config
-import { HTTP_OPTIONS, ENVIRONMENT } from './commons/config';
+import { HTTP_OPTIONS, ENVIRONMENT, MENU } from './commons/config';
 
 import SwalAlerts from './commons/swal.common';
 import Constants from './commons/constants.common';
@@ -15,6 +15,7 @@ export {
     Constants,
     HTTP_OPTIONS,
     ENVIRONMENT,
+    MENU,
 
     // Components
     HeaderComponent,
