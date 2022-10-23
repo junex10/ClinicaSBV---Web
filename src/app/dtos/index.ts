@@ -34,6 +34,10 @@ import {
     Associated
 } from './resources/auth.dto';
 
+import {
+    GetSpecializationsDTO
+} from './resources/patient.dto';
+
 export {
     // Request
     LoginDTO,
@@ -47,5 +51,6 @@ export {
     ResetParamsDTO,
     UpdateUserDTO,
     GetAssociatedDTO,
-    Associated
+    Associated,
+    GetSpecializationsDTO
 };

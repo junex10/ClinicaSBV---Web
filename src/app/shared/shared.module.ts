@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 import { DataTablesModule } from 'angular-datatables';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -44,6 +45,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
     MatCheckboxModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatSelectModule,
 
     DataTablesModule,
     NgxPaginationModule,
@@ -66,6 +68,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
     MatCheckboxModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
     PipesModule

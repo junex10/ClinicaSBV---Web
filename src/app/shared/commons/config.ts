@@ -54,8 +54,14 @@ export const MENU = [
         name: 'Citas',
         icon: "fa-solid fa-files",
         selected: false,
-        multiple: false,
-        route: '/patient/appointments'
+        multiple: true,
+        subMenu: [
+          {
+            name: 'Solicitud de Citas',
+            icon: 'fa-solid fa-files',
+            route: '/patient/appointments'
+          }
+        ]
       },
       {
         name: 'Salir',

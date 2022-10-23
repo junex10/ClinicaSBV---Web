@@ -1,0 +1,11 @@
+#step {
+    color: var(--success);
+}
+.form{
+    position: relative;
+    top: 200px;
+}
+.input {
+    background-color: white !important;
+    width: 100%;
+}

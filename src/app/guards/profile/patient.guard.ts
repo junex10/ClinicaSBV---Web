@@ -21,7 +21,6 @@ export class PatientGuard implements CanActivate {
         code: '/patient/appointments'
       })
       .catch(() => {
-        this.auth.logout();
         this.router.navigate(['/profile']);
       })
     return true;

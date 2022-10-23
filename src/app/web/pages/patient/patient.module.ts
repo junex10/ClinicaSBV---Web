@@ -19,7 +19,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    MedicalAppointmentsComponent
+  ],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
