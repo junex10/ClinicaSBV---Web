@@ -10,7 +10,7 @@ import {
 } from 'src/app/shared';
 import * as moment from 'moment';
 import { ENVIRONMENT } from 'src/app/shared';
-import { GetAssociatedDTO } from 'src/app/dtos';
+import { GetAssociatedDTO, User } from 'src/app/dtos';
 
 @Component({
   selector: 'app-profile',
@@ -111,8 +111,9 @@ export class ProfileComponent implements OnInit {
   next = (page: number) => this.load(page);
   getAssociates = (id: number, page: number) => {
     this.associates.getAll(id, page).then(
-      (item) => {
-        const data = item.rows.map(value => (
+      (item: any) => {
+        const associates: GetAssociatedDTO = item;
+        const data = associates.rows.map(value => (
           {
             id: value.id,
             name: value.person?.name,

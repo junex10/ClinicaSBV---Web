@@ -28,14 +28,17 @@ import {
 
 // Auth
 import {
+    User,
     GetUserDTO,
     ResetParamsDTO,
     GetAssociatedDTO,
-    Associated
+    Associated,
+    SelectDTO
 } from './resources/auth.dto';
 
 import {
-    GetSpecializationsDTO
+    GetSpecializationsDTO,
+    GetDoctorsDTO
 } from './resources/patient.dto';
 
 export {
@@ -47,10 +50,13 @@ export {
     ModifyAssociatedDTO,
 
     // Resources
+    User,
     GetUserDTO,
     ResetParamsDTO,
     UpdateUserDTO,
     GetAssociatedDTO,
     Associated,
-    GetSpecializationsDTO
+    GetSpecializationsDTO,
+    GetDoctorsDTO,
+    SelectDTO
 };

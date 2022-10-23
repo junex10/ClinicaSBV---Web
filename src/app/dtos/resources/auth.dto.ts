@@ -5,7 +5,7 @@ export interface GetUserDTO {
 export interface Associated {
     user: GetDataAssociatedDTO;
 }
-interface User {
+export interface User {
     id: number;
     email: string;
     password?: string;
@@ -48,4 +48,8 @@ export interface GetDataAssociatedDTO {
     verified?: number;
     status?: number;
     person: Person;
+}
+export interface SelectDTO {
+    name: string | number;
+    value: string | number;
 }

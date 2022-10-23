@@ -9,7 +9,10 @@ import { ProfileService } from './profile/profile.service';
 import { OperationService } from './operations/operations.service';
 
 // Patients
-import { AssociatesService } from './patient';
+import { 
+    AssociatesService,
+    AppointmentsService
+} from './patient';
 
 export {
     SocketsService,
@@ -18,5 +21,6 @@ export {
     PetitionService,
     ProfileService,
     AssociatesService,
-    OperationService
+    OperationService,
+    AppointmentsService
 }
