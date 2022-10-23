@@ -23,9 +23,16 @@
                             </ng-container>
                         </ng-container>
                         <ng-container *ngIf="!m.multiple">
-                            <a [ngStyle]="{'cursor': 'pointer'}" (click)="action(m.action)">
-                                <i [class]="m.icon" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i> <span class="menuItem">{{ m.name }}</span>
-                            </a>
+                            <ng-container *ngIf="!m.route">
+                                <a [ngStyle]="{'cursor': 'pointer'}" (click)="action(m.action)">
+                                    <i [class]="m.icon" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i> <span class="menuItem">{{ m.name }}</span>
+                                </a>
+                            </ng-container>
+                            <ng-container *ngIf="m.route">
+                                <a [ngStyle]="{'cursor': 'pointer'}" [routerLink]="m.route">
+                                    <i [class]="m.icon" [ngStyle]="{'margin-right': '20px', 'margin-left': '10px'}"></i> <span class="menuItem">{{ m.name }}</span>
+                                </a>
+                            </ng-container>
                         </ng-container>
                     </li>
                 </ul>
