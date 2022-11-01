@@ -36,5 +36,14 @@ export default {
 		}
 	},
 	PER_PAGE: 30,
-	PER_PAGE_WEB: 10
+	PER_PAGE_WEB: 10,
+	DAYS: {
+		MONDAY: 1,
+		TUESDAY: 2,
+		WEDNESDAY: 3,
+		THURSDAY: 4,
+		FRIDAY: 5,
+		SATURDAY: 6,
+		SUNDAY: 0
+	}
 }

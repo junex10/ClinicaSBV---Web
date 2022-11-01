@@ -38,7 +38,8 @@ import {
 
 import {
     GetSpecializationsDTO,
-    GetDoctorsDTO
+    GetDoctorsDTO,
+    GetDatesToHideDTO
 } from './resources/patient.dto';
 
 export {
@@ -58,5 +59,6 @@ export {
     Associated,
     GetSpecializationsDTO,
     GetDoctorsDTO,
-    SelectDTO
+    SelectDTO,
+    GetDatesToHideDTO
 };

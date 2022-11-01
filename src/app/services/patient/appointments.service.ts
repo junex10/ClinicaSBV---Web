@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   GetSpecializationsDTO,
-  GetDoctorsDTO
+  GetDoctorsDTO,
+  GetDatesToHideDTO
 } from 'src/app/dtos';
 import { IPATIENTS_APPOINTMENTS } from 'src/app/interfaces';
 
@@ -20,5 +21,7 @@ export class AppointmentsService implements IPATIENTS_APPOINTMENTS {
   getSpecializations = () => this.http.get<GetSpecializationsDTO[]>(`${API}getSpecializations`);
 
   getDoctor = (specialization_id: number) => this.http.get<GetDoctorsDTO[]>(`${API}getDoctor/${specialization_id}`);
+
+  getDoctorControl = (doctor_id: number, specialization_id: number) => this.http.get<GetDatesToHideDTO>(`${API}getDoctorControl/${doctor_id}/${specialization_id}`);
 
 }

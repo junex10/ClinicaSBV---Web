@@ -21,7 +21,9 @@ export class AssociatesService implements IPATIENTS {
 
   addAssociated = (body: any) => this.http.post<GetAssociatedDTO>(`${API}new_associated`, body).toPromise();
 
-  getAll = (user_id: number, page?: number) => this.http.get<GetAssociatedDTO | User[]>(`${API}getAll/${user_id}/${page}`).toPromise();
+  getAll = (user_id: number, page: number | undefined = undefined) => 
+    page === undefined ? this.http.get<GetAssociatedDTO | User[]>(`${API}getAll/${user_id}`).toPromise()
+    : this.http.get<GetAssociatedDTO | User[]>(`${API}getAll/${user_id}/${page}`).toPromise();
 
   getAssociated = (user_id: number) => this.http.get<Associated>(`${API}getAssociated/${user_id}`);
 

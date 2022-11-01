@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { GetSpecializationsDTO, GetDoctorsDTO, SelectDTO, User } from 'src/app/dtos';
 import { AppointmentsService, AssociatesService, AuthService } from 'src/app/services';
+import { Constants } from 'src/app/shared';
 
 @Component({
   selector: 'app-medical-appointments',
@@ -21,6 +22,35 @@ export class MedicalAppointmentsComponent implements OnInit {
   specialization: GetSpecializationsDTO[] = [];
   doctors: GetDoctorsDTO[] = [];
   patient: SelectDTO[] = [];
+  hasFecthDates: boolean = false;
+
+  blockDays: number[] = [];
+  blockWeeks: number[] = [];
+  minDate = new Date();
+
+  filterByControls = (d: Date | null): boolean => {
+    const doctor = this.form_doctor;
+    const specialization = this.form_specialization;
+    // Fetch control appointments of doctor
+   if (!this.hasFecthDates) {
+    this.appointments.getDoctorControl(doctor, specialization).subscribe(
+      (value) => {
+        this.blockDays = value.data.days.map(item => moment(item).unix());
+        this.blockWeeks = value.data.weeks;
+      },
+      () => {},
+      () => this.hasFecthDates = true
+    )
+   }
+    
+    const time = moment(d).unix();
+    const day = (d || new Date()).getDay();
+    return (
+      !this.blockDays.find(x => x === time) &&
+      !this.blockWeeks.find(y => y === day) &&
+      day !== 0
+    );
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +63,8 @@ export class MedicalAppointmentsComponent implements OnInit {
       specialization: [null, Validators.required],
       doctor: [null, Validators.required],
       medical_description: [null, Validators.required],
-      patient: [null, Validators.required]
+      patient: [null, Validators.required],
+      date_cite: [null, Validators.required]
     })
   }
 
@@ -52,7 +83,6 @@ export class MedicalAppointmentsComponent implements OnInit {
         ...formatSelect
       ];
     })
-    console.log(user)
   }
 
   getSpecializations = () => {
@@ -72,10 +102,14 @@ export class MedicalAppointmentsComponent implements OnInit {
     )
   }
 
-  next = () => this.actualStep = this.STEPS.TAB_DATE;
+  next = () => {
+    // Fetch por appointments control of doctor
+
+    this.actualStep = this.STEPS.TAB_DATE;
+  }
 
   submit = () => {
-
+    console.log('epa')
   }
 
   get form_medical_reason() { return this.form.get('medical_reason')?.value }
@@ -83,5 +117,6 @@ export class MedicalAppointmentsComponent implements OnInit {
   get form_doctor() { return this.form.get('doctor')?.value }
   get form_medical_description() { return this.form.get('medical_description')?.value }
   get form_patient() { return this.form.get('patient')?.value }
+  get form_date_cite() { return this.form.get('date_cite')?.value }
 
 }
