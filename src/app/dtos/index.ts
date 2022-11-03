@@ -36,6 +36,12 @@ import {
     SelectDTO
 } from './resources/auth.dto';
 
+// Appointments
+
+import {
+    RegisterAppointmentDTO
+} from './resources/appointments.dto';
+
 import {
     GetSpecializationsDTO,
     GetDoctorsDTO,
@@ -60,5 +66,6 @@ export {
     GetSpecializationsDTO,
     GetDoctorsDTO,
     SelectDTO,
-    GetDatesToHideDTO
+    GetDatesToHideDTO,
+    RegisterAppointmentDTO,
 };

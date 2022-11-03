@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { GetSpecializationsDTO, GetDoctorsDTO, SelectDTO, User } from 'src/app/dtos';
 import { AppointmentsService, AssociatesService, AuthService } from 'src/app/services';
-import { Constants } from 'src/app/shared';
+import { SwalAlerts } from 'src/app/shared';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-medical-appointments',
@@ -27,6 +28,12 @@ export class MedicalAppointmentsComponent implements OnInit {
   blockDays: number[] = [];
   blockWeeks: number[] = [];
   minDate = new Date();
+
+  user = this.auth.getUser()?.user;
+  patientSelected: any = {
+    name: '',
+    lastname: ''
+  };
 
   filterByControls = (d: Date | null): boolean => {
     const doctor = this.form_doctor;
@@ -74,12 +81,11 @@ export class MedicalAppointmentsComponent implements OnInit {
   }
 
   getPatients = () => {
-    const user = this.auth.getUser()?.user;
-    this.associates.getAll(user.id).then((data: any) => {
+    this.associates.getAll(this.user.id).then((data: any) => {
       const item: User[] = Object.values(data);
       const formatSelect: SelectDTO[] = item.map(value => ({ name: `${value.person.name} ${value.person.lastname}`, value: value.id }));
       this.patient = [
-        { name: 'Yo', value: user.id },
+        { name: 'Yo', value: this.user.id },
         ...formatSelect
       ];
     })
@@ -102,14 +108,36 @@ export class MedicalAppointmentsComponent implements OnInit {
     )
   }
 
-  next = () => {
-    // Fetch por appointments control of doctor
+  next = () => this.actualStep = this.STEPS.TAB_DATE;
+  back = () => this.actualStep = this.STEPS.TAB_DATA;
 
-    this.actualStep = this.STEPS.TAB_DATE;
+  getUser = () => {
+    const patient = this.form_patient;
+    if (patient === this.user.id) {
+      this.patientSelected = {
+        name: this.user.person.name,
+        lastname: this.user.person.lastname
+      }
+    } else {
+      this.associates.getAssociated(patient).subscribe(
+        (data) => {
+          this.patientSelected = {
+            name: data.user.person.name,
+            lastname: data.user.person.lastname
+          };
+        }
+      );
+    }
   }
 
   submit = () => {
-    console.log('epa')
+    if (!this.form.invalid) {
+      this.appointments.register(this.form.value).subscribe(
+        () => {
+          Swal.fire(SwalAlerts.swalSuccess('Cita', 'Cita registrada con éxito', 'Aceptar'))
+        }
+      )
+    }
   }
 
   get form_medical_reason() { return this.form.get('medical_reason')?.value }

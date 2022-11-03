@@ -6,13 +6,19 @@
             navbar-scroll="true">
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
-                    <h1 class="font-weight-bolder mb-0" [ngStyle]="{'font-size': '20px'}">Solicitud de Citas Médicas</h1>
+                    <h1 class="font-weight-bolder mb-0" [ngStyle]="{'font-size': '20px'}">Solicitud de Citas Médicas
+                    </h1>
                 </nav>
             </div>
         </nav>
         <div class="container-fluid px-2 px-md-4 form">
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row gx-4 mb-2">
+                    <ng-container *ngIf="actualStep === STEPS.TAB_DATE">
+                        <div class="col-auto" (click)="back()">
+                            <i class="fa-solid fa-arrow-left" [ngStyle]="{'font-size': '24px'}"></i>
+                        </div>
+                    </ng-container>
                     <div class="col-auto my-auto">
                         <div class="h-100">
                             <h5 class="mb-1">
@@ -36,7 +42,8 @@
                                         <div class="row">
                                             <div class="col-xl-4 col-md-4 col-sm-12 col-12 row">
                                                 <div class="col-auto w-100">
-                                                    <div class="avatar avatar-xl position-relative d-block m-auto w-50 h-50">
+                                                    <div
+                                                        class="avatar avatar-xl position-relative d-block m-auto w-50 h-50">
                                                         <img [src]="'assets/img/user.png'" alt="Imagen de usuario"
                                                             class="w-100 border-radius-lg shadow-sm">
                                                     </div>
@@ -44,10 +51,11 @@
                                                 <div class="col-12 mt-4">
                                                     <div class="h-100">
                                                         <h5 class="mb-1" [ngStyle]="{'text-align': 'center'}">
-                                                            32
+                                                            {{ patientSelected.name ?? '' }}
                                                         </h5>
-                                                        <p class="mb-0 font-weight-normal text-sm" [ngStyle]="{'text-align': 'center'}">
-                                                            32
+                                                        <p class="mb-0 font-weight-normal text-sm"
+                                                            [ngStyle]="{'text-align': 'center'}">
+                                                            {{ patientSelected.lastname ?? '' }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -56,12 +64,15 @@
                                                 <div class="col-12">
                                                     <mat-form-field class="input" appearance="standard">
                                                         <mat-label>Paciente</mat-label>
-                                                        <mat-select formControlName="patient" required>
-                                                          <mat-option *ngFor="let item of patient" [value]="item.value">
-                                                            {{ item.name }}
-                                                          </mat-option>
+                                                        <mat-select formControlName="patient"
+                                                            (selectionChange)="getUser()" required>
+                                                            <mat-option *ngFor="let item of patient"
+                                                                [value]="item.value">
+                                                                {{ item.name }}
+                                                            </mat-option>
                                                         </mat-select>
-                                                        <mat-error *ngIf="form.controls['patient'].errors?.required && form.controls['patient'].touched">
+                                                        <mat-error
+                                                            *ngIf="form.controls['patient'].errors?.required && form.controls['patient'].touched">
                                                             Debe seleccionar a un Paciente
                                                         </mat-error>
                                                     </mat-form-field>
@@ -69,12 +80,15 @@
                                                 <div class="col-xl-6 col-md-6 col-sm-12 col-12">
                                                     <mat-form-field class="input" appearance="standard">
                                                         <mat-label>Especializaciones</mat-label>
-                                                        <mat-select formControlName="specialization" (selectionChange)="getDoctorBySpecialization()" required>
-                                                          <mat-option *ngFor="let item of specialization" [value]="item.id">
-                                                            {{ item.name }}
-                                                          </mat-option>
+                                                        <mat-select formControlName="specialization"
+                                                            (selectionChange)="getDoctorBySpecialization()" required>
+                                                            <mat-option *ngFor="let item of specialization"
+                                                                [value]="item.id">
+                                                                {{ item.name }}
+                                                            </mat-option>
                                                         </mat-select>
-                                                        <mat-error *ngIf="form.controls['specialization'].errors?.required && form.controls['specialization'].touched">
+                                                        <mat-error
+                                                            *ngIf="form.controls['specialization'].errors?.required && form.controls['specialization'].touched">
                                                             Debe seleccionar una especialidad
                                                         </mat-error>
                                                     </mat-form-field>
@@ -82,12 +96,15 @@
                                                 <div class="col-xl-6 col-md-6 col-sm-12 col-12">
                                                     <mat-form-field class="input" appearance="standard">
                                                         <mat-label>Doctores</mat-label>
-                                                        <mat-select formControlName="doctor" [disabled]="doctors.length <= 0" required>
-                                                          <mat-option *ngFor="let item of doctors" [value]="item.doctor.id">
-                                                            {{ item.doctor.person.name }}
-                                                          </mat-option>
+                                                        <mat-select formControlName="doctor"
+                                                            [disabled]="doctors.length <= 0" required>
+                                                            <mat-option *ngFor="let item of doctors"
+                                                                [value]="item.doctor.id">
+                                                                {{ item.doctor.person.name }}
+                                                            </mat-option>
                                                         </mat-select>
-                                                        <mat-error *ngIf="form.controls['doctor'].errors?.required && form.controls['doctor'].touched">
+                                                        <mat-error
+                                                            *ngIf="form.controls['doctor'].errors?.required && form.controls['doctor'].touched">
                                                             Debe seleccionar un doctor
                                                         </mat-error>
                                                     </mat-form-field>
@@ -95,8 +112,10 @@
                                                 <div class="col-12">
                                                     <mat-form-field class="input" appearance="standard">
                                                         <mat-label>Razón de la cita</mat-label>
-                                                        <input matInput formControlName="medical_reason" name="medical_reason" required>
-                                                        <mat-error *ngIf="form.controls['medical_reason'].errors?.required && form.controls['medical_reason'].touched">
+                                                        <input matInput formControlName="medical_reason"
+                                                            name="medical_reason" required>
+                                                        <mat-error
+                                                            *ngIf="form.controls['medical_reason'].errors?.required && form.controls['medical_reason'].touched">
                                                             Razón de la cita requerida
                                                         </mat-error>
                                                     </mat-form-field>
@@ -104,15 +123,19 @@
                                                 <div class="col-12">
                                                     <mat-form-field class="input" appearance="standard">
                                                         <mat-label>Descripción de la cita</mat-label>
-                                                        <textarea matInput placeholder="Descripción" formControlName="medical_description" required="false"></textarea>
-                                                        <mat-error *ngIf="form.controls['medical_description'].errors?.required && form.controls['medical_description'].touched">
+                                                        <textarea matInput placeholder="Descripción"
+                                                            formControlName="medical_description"
+                                                            required="false"></textarea>
+                                                        <mat-error
+                                                            *ngIf="form.controls['medical_description'].errors?.required && form.controls['medical_description'].touched">
                                                             Descripción de la cita
                                                         </mat-error>
                                                     </mat-form-field>
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-4">
-                                                <button mat-raised-button class="button btn-success w-100" (click)="next()">Siguiente</button>
+                                                <button mat-raised-button class="button btn-success w-100"
+                                                    (click)="next()">Siguiente</button>
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +144,8 @@
                             <ng-container *ngIf="actualStep === STEPS.TAB_DATE">
                                 <mat-form-field class="input" appearance="standard">
                                     <mat-label>Fecha de la cita</mat-label>
-                                    <input matInput [matDatepickerFilter]="filterByControls" [min]="minDate" [matDatepicker]="picker" formControlName="date_cite" required="false">
+                                    <input matInput [matDatepickerFilter]="filterByControls" [min]="minDate"
+                                        [matDatepicker]="picker" formControlName="date_cite" required="false">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker touchUi #picker></mat-datepicker>
                                 </mat-form-field>
