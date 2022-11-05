@@ -116,7 +116,7 @@ export class MedicalAppointmentsComponent implements OnInit {
   getUser = () => {
     const patient = this.form_patient;
     if (patient === this.user.id) {
-      const photo = `${ENVIRONMENT.storage}${this.user?.photo}` ?? 'assets/img/user.png';
+      const photo = this.user.photo ? `${ENVIRONMENT.storage}${this.user?.photo}` : 'assets/img/user.png';
       this.patientSelected = {
         name: this.user.person.name,
         lastname: this.user.person.lastname,
@@ -125,7 +125,7 @@ export class MedicalAppointmentsComponent implements OnInit {
     } else {
       this.associates.getAssociated(patient).subscribe(
         (data) => {
-          const photo = `${ENVIRONMENT.storage}${data.user?.photo}` ?? 'assets/img/user.png';
+          const photo = data.user?.photo ? `${ENVIRONMENT.storage}${data.user?.photo}` : 'assets/img/user.png';
           this.patientSelected = {
             name: data.user.person.name,
             lastname: data.user.person.lastname,
