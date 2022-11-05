@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MedicalAppointmentsComponent } from './medical-appointments/medical-appointments.component';
 import { PatientGuard } from 'src/app/guards';
+import { AppointmentsListComponent } from './medical-appointments/appointments-list/appointments-list.component';
 
 const routes: Routes = [
   {
@@ -15,12 +16,18 @@ const routes: Routes = [
     path: 'patient/appointments',
     component: MedicalAppointmentsComponent,
     canActivate: [PatientGuard]
+  },
+  {
+    path: 'patient/appointments-list',
+    component: AppointmentsListComponent,
+    canActivate: [PatientGuard]
   }
 ];
 
 @NgModule({
   declarations: [
-    MedicalAppointmentsComponent
+    MedicalAppointmentsComponent,
+    AppointmentsListComponent
   ],
   imports: [
     RouterModule.forChild(routes),

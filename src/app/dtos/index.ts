@@ -24,6 +24,10 @@ import {
     ModifyAssociatedDTO
 } from './request/associates.dto';
 
+import {
+    GetAppointmentsDTO
+} from './request/appointments.dto';
+
 // Resources 
 
 // Auth
@@ -48,6 +52,10 @@ import {
     GetDatesToHideDTO
 } from './resources/patient.dto';
 
+import {
+    PaginationDTO
+} from './resources/general.dto';
+
 export {
     // Request
     LoginDTO,
@@ -55,6 +63,7 @@ export {
     CheckPermissionDTO,
     OperationDTO,
     ModifyAssociatedDTO,
+    GetAppointmentsDTO,
 
     // Resources
     User,
@@ -68,4 +77,5 @@ export {
     SelectDTO,
     GetDatesToHideDTO,
     RegisterAppointmentDTO,
+    PaginationDTO
 };

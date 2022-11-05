@@ -60,6 +60,11 @@ export const MENU = [
             name: 'Solicitud de Citas',
             icon: 'fa-solid fa-files',
             route: '/patient/appointments'
+          },
+          {
+            name: 'Ver listado de Citas',
+            icon: 'fa-solid fa-files',
+            route: '/patient/appointments-list'
           }
         ]
       },

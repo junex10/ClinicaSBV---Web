@@ -4,10 +4,11 @@ import {
   GetSpecializationsDTO,
   GetDoctorsDTO,
   GetDatesToHideDTO,
-  RegisterAppointmentDTO
+  RegisterAppointmentDTO,
+  GetAppointmentsDTO,
+  PaginationDTO
 } from 'src/app/dtos';
 import { IPATIENTS_APPOINTMENTS } from 'src/app/interfaces';
-import { FormGroup } from '@angular/forms';
 
 const API = 'patient/appointments/';
 
@@ -27,4 +28,6 @@ export class AppointmentsService implements IPATIENTS_APPOINTMENTS {
   getDoctorControl = (doctor_id: number, specialization_id: number) => this.http.get<GetDatesToHideDTO>(`${API}getDoctorControl/${doctor_id}/${specialization_id}`);
   
   register = (request: RegisterAppointmentDTO) => this.http.post<RegisterAppointmentDTO | boolean>(`${API}register`, request);
+
+  get = (request: GetAppointmentsDTO) => this.http.post<PaginationDTO>(API, request);
 }
