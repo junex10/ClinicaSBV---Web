@@ -20,7 +20,7 @@
                                 <h6 class="mb-0">Listado de citas</h6>
                             </div>
                             <div class="col-md-4 text-end">
-                                <i class="fa-solid fa-file-pdf text-secondary option" title="Descargar en PDF" [ngStyle]="{'cursor': 'pointer'}"></i>
+                                <i class="fa-solid fa-file-pdf text-secondary option" (click)="getPDF()" title="Descargar en PDF" [ngStyle]="{'cursor': 'pointer'}"></i>
                                     <i class="fa-solid fa-file-excel text-secondary option" title="Descargar en Excel" [ngStyle]="{'cursor': 'pointer'}"></i>
                                 <a [routerLink]="['/patient/appointments']" [ngStyle]="{'cursor': 'pointer'}">
                                     <i class="fa-solid fa-plus text-secondary text-sm option"
@@ -36,8 +36,7 @@
                             [header]="header"
                             [data]="data"
                             [total]="total"
-                            (next)="getAssociates($event)"
-                            (toolActionsEvent)="receivedTools($event)"
+                            (next)="getAppointments($event)"
                             [thStyles]="{'background': 'var(--danger)'}"
                             [thItemsStyles]="{'font-weight': 'bold', 'color': 'white'}"
                         ></app-table>

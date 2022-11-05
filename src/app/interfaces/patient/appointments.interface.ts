@@ -13,4 +13,5 @@ export interface IPATIENTS_APPOINTMENTS {
     getDoctorControl(doctor_id: number, specialization_id: number): Observable<GetDatesToHideDTO>;
     register(request: RegisterAppointmentDTO): Observable<RegisterAppointmentDTO | boolean>;
     get(request: GetAppointmentsDTO): Observable<any>;
+    getPDF(request: GetAppointmentsDTO): Observable<any>;
 }

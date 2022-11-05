@@ -6,6 +6,8 @@ import {
   AppointmentsService
 } from 'src/app/services';
 import * as moment from 'moment';
+import * as PrintJS from 'print-js';
+import { ENVIRONMENT } from 'src/app/shared';
 
 @Component({
   selector: 'app-appointments-list',
@@ -32,7 +34,6 @@ export class AppointmentsListComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private associates: AssociatesService,
     private appointments: AppointmentsService
   ) { }
 
@@ -48,34 +49,14 @@ export class AppointmentsListComponent implements OnInit {
       }
     )
   }
-  receivedTools = ($function: any) => {
-    this.itemSelected = $function;
-    eval(`this.${$function.action}`);
-  }
 
-  getAssociates = (page: number) => {
-    this.associates.getAll(this.user.id, page).then(
-      (item: any) => {
-        const associates: GetAssociatedDTO = item;
-        const data = associates.rows.map(value => (
-          {
-            id: value.id,
-            name: value.person?.name,
-            lastname: value.person?.lastname,
-            age: value.person?.age,
-            tools: [
-              {
-                icon: 'visibility',
-                action: 'showAssociated()'
-              }
-            ]
-          }
-        ))
-        this.associateList = {
-          ...this.associateList,
-          data,
-          total: item.count
-        }
+  getPDF = () => {
+    this.appointments.getPDF({ user_id: this.user.id, page: this.page}).subscribe(
+      (data) => {
+        const url = `${ENVIRONMENT.storage}${data.url}`;
+        PrintJS({
+          printable: url
+        });
       }
     )
   }

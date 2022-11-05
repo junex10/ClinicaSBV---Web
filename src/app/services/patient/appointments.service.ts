@@ -30,4 +30,6 @@ export class AppointmentsService implements IPATIENTS_APPOINTMENTS {
   register = (request: RegisterAppointmentDTO) => this.http.post<RegisterAppointmentDTO | boolean>(`${API}register`, request);
 
   get = (request: GetAppointmentsDTO) => this.http.post<PaginationDTO>(API, request);
+
+  getPDF = (request: GetAppointmentsDTO) => this.http.post<any>(`${API}getPDF`, request);
 }
