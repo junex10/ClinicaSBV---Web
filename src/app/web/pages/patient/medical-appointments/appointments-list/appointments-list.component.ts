@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { GetAssociatedDTO } from 'src/app/dtos';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { 
   AuthService,
-  AssociatesService,
   AppointmentsService
 } from 'src/app/services';
 import * as moment from 'moment';
@@ -25,24 +25,30 @@ export class AppointmentsListComponent implements OnInit {
   user = this.auth.getUser()?.user;
   moment: any = moment;
 
-  associateList = {
-    data: <GetAssociatedDTO | any>[],
-    page: 1,
-    total: 0,
-    header: ['#', 'Nombre', 'Apellido', 'Razón de la cita', 'Descripción', 'Monto', 'Estatus', 'Fecha de la cita', 'Fecha de entrada']
-  }
+  options = [
+    { value: 1, name: 'Todos' },
+    { value: 2, name: 'Por asociados' },
+    { value: 3, name: 'Personales' }
+  ];
+
+  form: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private auth: AuthService,
     private appointments: AppointmentsService
-  ) { }
-
-  ngOnInit(): void {
-    this.getAppointments(this.page);
+  ) {
+    this.form = this.fb.group({
+      formOptions: [null]
+    })
   }
 
-  getAppointments = (page: number) => {
-    this.appointments.get({ user_id: this.user.id, page}).subscribe(
+  ngOnInit(): void {
+    this.getAppointments(this.page, this.filter);
+  }
+
+  getAppointments = (page: number, value: number) => {
+    this.appointments.get({ user_id: this.user.id, page, filterType: value }).subscribe(
       (item) => {
         this.data = item.data.rows;
         this.total = item.data.count;
@@ -69,5 +75,7 @@ export class AppointmentsListComponent implements OnInit {
       }
     )
   }
+
+  get filter() { return this.form.get('formOptions')?.value }
 
 }
