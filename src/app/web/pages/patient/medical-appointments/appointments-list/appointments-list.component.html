@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-md-4 text-end">
                                 <i class="fa-solid fa-file-pdf text-secondary option" (click)="getPDF()" title="Descargar en PDF" [ngStyle]="{'cursor': 'pointer'}"></i>
-                                    <i class="fa-solid fa-file-excel text-secondary option" title="Descargar en Excel" [ngStyle]="{'cursor': 'pointer'}"></i>
+                                    <i class="fa-solid fa-file-excel text-secondary option" (click)="getExcel()" title="Descargar en Excel" [ngStyle]="{'cursor': 'pointer'}"></i>
                                 <a [routerLink]="['/patient/appointments']" [ngStyle]="{'cursor': 'pointer'}">
                                     <i class="fa-solid fa-plus text-secondary text-sm option"
                                         data-bs-toggle="tooltip" data-bs-placement="top"

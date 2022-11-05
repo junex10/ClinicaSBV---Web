@@ -51,12 +51,21 @@ export class AppointmentsListComponent implements OnInit {
   }
 
   getPDF = () => {
-    this.appointments.getPDF({ user_id: this.user.id, page: this.page}).subscribe(
+    this.appointments.getPDF({ user_id: this.user.id, page: this.page }).subscribe(
       (data) => {
         const url = `${ENVIRONMENT.storage}${data.url}`;
         PrintJS({
           printable: url
         });
+      }
+    )
+  }
+
+  getExcel = () => {
+    this.appointments.getExcel({ user_id: this.user.id, page: this.page }).subscribe(
+      (data) => {
+        const url = `${ENVIRONMENT.storage}${data.url}`;
+        window.open(url);
       }
     )
   }

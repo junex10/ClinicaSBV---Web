@@ -32,4 +32,6 @@ export class AppointmentsService implements IPATIENTS_APPOINTMENTS {
   get = (request: GetAppointmentsDTO) => this.http.post<PaginationDTO>(API, request);
 
   getPDF = (request: GetAppointmentsDTO) => this.http.post<any>(`${API}getPDF`, request);
+
+  getExcel = (request: GetAppointmentsDTO) => this.http.post<any>(`${API}getExcel`, request);
 }

@@ -14,4 +14,5 @@ export interface IPATIENTS_APPOINTMENTS {
     register(request: RegisterAppointmentDTO): Observable<RegisterAppointmentDTO | boolean>;
     get(request: GetAppointmentsDTO): Observable<any>;
     getPDF(request: GetAppointmentsDTO): Observable<any>;
+    getExcel(request: GetAppointmentsDTO): Observable<any>;
 }
