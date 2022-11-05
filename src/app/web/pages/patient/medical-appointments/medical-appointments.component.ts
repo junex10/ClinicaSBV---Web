@@ -5,6 +5,7 @@ import { GetSpecializationsDTO, GetDoctorsDTO, SelectDTO, User } from 'src/app/d
 import { AppointmentsService, AssociatesService, AuthService } from 'src/app/services';
 import { SwalAlerts } from 'src/app/shared';
 import Swal from 'sweetalert2';
+import { ENVIRONMENT } from 'src/app/shared';
 
 @Component({
   selector: 'app-medical-appointments',
@@ -32,7 +33,8 @@ export class MedicalAppointmentsComponent implements OnInit {
   user = this.auth.getUser()?.user;
   patientSelected: any = {
     name: '',
-    lastname: ''
+    lastname: '',
+    photo: 'assets/img/user.png'
   };
 
   filterByControls = (d: Date | null): boolean => {
@@ -114,16 +116,20 @@ export class MedicalAppointmentsComponent implements OnInit {
   getUser = () => {
     const patient = this.form_patient;
     if (patient === this.user.id) {
+      const photo = `${ENVIRONMENT.storage}${this.user?.photo}` ?? 'assets/img/user.png';
       this.patientSelected = {
         name: this.user.person.name,
-        lastname: this.user.person.lastname
+        lastname: this.user.person.lastname,
+        photo
       }
     } else {
       this.associates.getAssociated(patient).subscribe(
         (data) => {
+          const photo = `${ENVIRONMENT.storage}${data.user?.photo}` ?? 'assets/img/user.png';
           this.patientSelected = {
             name: data.user.person.name,
-            lastname: data.user.person.lastname
+            lastname: data.user.person.lastname,
+            photo
           };
         }
       );
