@@ -1,1 +1,118 @@
-<p>chat works!</p>
+<app-header></app-header>
+<div class="g-sidenav-show bg-gray-200 h-100">
+    <div class="main-content position-relative max-height-vh-100 h-100">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+            navbar-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                    <h1 class="font-weight-bolder mb-0" [ngStyle]="{'font-size': '20px'}">Listado de Chats</h1>
+                </nav>
+            </div>
+        </nav>
+        <div class="container-fluid px-2 px-md-4" [ngStyle]="{'position': 'relative', 'top': '20px'}">
+            <div class="col-12 mt-4">
+                <div class="card card-plain h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row">
+                            <div class="col-md-8 d-flex align-items-center">
+                                <h6 class="mb-0">Chats</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body tabs">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 item-list"
+                                [ngClass]="{'item-selected': actualTab === TABS.CHATS }" (click)="tab(TABS.CHATS)">
+                                <h2>MIS CHATS</h2>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 item-list"
+                                [ngClass]="{'item-selected': actualTab === TABS.GROUPS }" (click)="tab(TABS.GROUPS)">
+                                <h2>MIS GRUPOS</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Search bar -->
+                    <div class="search-bar pl-4">
+                        <form [formGroup]="form" autocomplete="on">
+                            <mat-form-field class="input" appearance="standard">
+                                <input matInput formControlName="search" name="search" type="search"
+                                    placeholder="Buscar un chat" required="false">
+                                <mat-icon matSuffix>search</mat-icon>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                                <ng-container *ngIf="actualTab === TABS.CHATS">
+                                    <div class="chats-box">
+                                        <div class="col-12 item-chat">
+                                            <div class="row">
+                                                <div class="col-2 avatar">
+                                                    <img [src]="'assets/img/user.png'" />
+                                                </div>
+                                                <div class="col-5">
+                                                    <h4 class="title_chat">Test name</h4>
+                                                    <p class="last_message">Test last message</p>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p class="timelog">3:34pm</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <!-- Chat -->
+                            <div class="col-12 col-sm-12 col-md-8 col-lg-8 chats">
+                                <!-- chat header -->
+                                <div class="row chat-header">
+                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 avatar">
+                                        <img [src]="'assets/img/user.png'" />
+                                        <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">Test</h4>
+                                    </div>
+                                </div>
+                                <!-- Chat content -->
+                                <div class="row chat-content">
+                                    <!-- Receiver -->
+                                    <div class="col-12 receiver">
+                                        <div class="box-chat-content box-shadow">
+                                            <p class="message">
+                                                Recibiendo mensaje
+                                                <span class="message-timelog">6:04pm</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Sender -->
+                                    <div class="col-12 sender">
+                                        <div class="box-chat-content box-shadow">
+                                            <p class="message">
+                                                Mandando mensaje
+                                                <span class="message-timelog">6:04pm</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Last message -->
+                                    <div class="last-message-box"></div>
+                                </div>
+                                <!-- Chat to type message -->
+                                <div class="row box-message">
+                                    <div class="col-12">
+                                        <form [formGroup]="message" autocomplete="on">
+                                            <mat-form-field class="inputType" appearance="outline">
+                                                <input matInput formControlName="message" name="message" type="text"
+                                                    placeholder="Escribe un mensaje aquí" required="false">
+                                                <mat-icon matSuffix>search</mat-icon>
+                                            </mat-form-field>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
