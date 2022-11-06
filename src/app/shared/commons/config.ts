@@ -26,6 +26,13 @@ export const MENU = [
         ],
       },
       {
+        name: 'Chats',
+        icon: "fa-solid fa-user",
+        selected: false,
+        multiple: false,
+        route: '/chats'
+      },
+      {
         name: 'Salir',
         icon: 'fa-solid fa-arrow-right-from-bracket',
         selected: false,
@@ -69,6 +76,13 @@ export const MENU = [
         ]
       },
       {
+        name: 'Chats',
+        icon: "fa-solid fa-user",
+        selected: false,
+        multiple: false,
+        route: '/chats'
+      },
+      {
         name: 'Salir',
         icon: 'fa-solid fa-arrow-right-from-bracket',
         selected: false,
@@ -92,6 +106,13 @@ export const MENU = [
             route: '/profile'
           }
         ],
+      },
+      {
+        name: 'Chats',
+        icon: "fa-solid fa-user",
+        selected: false,
+        multiple: false,
+        route: '/chats'
       },
       {
         name: 'Salir',
@@ -119,6 +140,13 @@ export const MENU = [
         ],
       },
       {
+        name: 'Chats',
+        icon: "fa-solid fa-user",
+        selected: false,
+        multiple: false,
+        route: '/chats'
+      },
+      {
         name: 'Salir',
         icon: 'fa-solid fa-arrow-right-from-bracket',
         selected: false,
@@ -142,6 +170,13 @@ export const MENU = [
             route: '/profile'
           }
         ],
+      },
+      {
+        name: 'Chats',
+        icon: "fa-solid fa-user",
+        selected: false,
+        multiple: false,
+        route: '/chats'
       },
       {
         name: 'Salir',

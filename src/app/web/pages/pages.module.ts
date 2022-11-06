@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProfileModule } from './profile/profile.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PatientModule } from 'src/app/web/pages/patient/patient.module';
+import { ChatModule } from './chat/chat.module';
 
 const routes: Routes = [
   {
@@ -26,12 +27,15 @@ const routes: Routes = [
   {
     path: 'patient',
     loadChildren: () => import('src/app/web/pages/patient/patient.module').then(mod => mod.PatientModule)
+  },
+  {
+    path: 'chat',
+    loadChildren: () => import('src/app/web/pages/chat/chat.module').then(mod => mod.ChatModule)
   }
 ];
 
 @NgModule({
   declarations: [
-  
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -41,7 +45,8 @@ const routes: Routes = [
 
     // Modules
     ProfileModule,
-    PatientModule
+    PatientModule,
+    ChatModule
   ]
 })
 export class PagesModule { }
