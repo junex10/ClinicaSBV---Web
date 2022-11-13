@@ -90,6 +90,16 @@ export class ChatComponent implements OnInit {
     this.form.get('message')?.setValue('');
   }
 
+  searchChats = () => {
+    const search = this.search;
+    if (search !== null) {
+      const chats = this.chats.filter((x: any) => x.item.chat_session.name.match(eval(`/${search}.*/`)));
+      this.chats = chats;
+    } else {
+      this.getChats(this.user.id);
+    }
+  }
+
   get search() { return this.form.get('search')?.value }
   get message_form() { return this.message.get('message')?.value }
 }

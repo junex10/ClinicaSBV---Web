@@ -30,7 +30,7 @@
                         <form [formGroup]="form" autocomplete="on">
                             <mat-form-field class="input" appearance="standard">
                                 <input matInput formControlName="search" name="search" type="search"
-                                    placeholder="Buscar un chat" required="false">
+                                    placeholder="Buscar un chat" required="false" (keyup)="searchChats()">
                                 <mat-icon matSuffix>search</mat-icon>
                             </mat-form-field>
                         </form>
