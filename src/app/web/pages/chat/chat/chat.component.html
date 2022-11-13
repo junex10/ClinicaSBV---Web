@@ -40,12 +40,15 @@
                             <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                                 <ng-container *ngIf="actualTab === TABS.CHATS">
                                     <div class="chats-box">
-                                        <div class="col-12 item-chat" *ngFor="let value of chats">
+                                        <div class="col-12 item-chat" *ngFor="let value of chats"
+                                            (click)="select_chat(value.item.chat_session.id)">
                                             <div class="row">
-                                                <div class="col-2 avatar" *ngIf="value.item.chat_session.attachment !== null">
+                                                <div class="col-2 avatar"
+                                                    *ngIf="value.item.chat_session.attachment !== null">
                                                     <img [src]="env.storage + value.item.chat_session.attachment" />
                                                 </div>
-                                                <div class="col-2 avatar" *ngIf="value.item.chat_session.attachment == null">
+                                                <div class="col-2 avatar"
+                                                    *ngIf="value.item.chat_session.attachment == null">
                                                     <img [src]="'assets/img/user.png'" />
                                                 </div>
                                                 <div class="col-5">
@@ -53,45 +56,56 @@
                                                     <p class="last_message">{{ value.lastMessage }}</p>
                                                 </div>
                                                 <div class="col-4">
-                                                    <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a') }}</p>
+                                                    <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a')
+                                                        }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </ng-container>
                             </div>
-                            <ng-container *ngIf="chatSelected !== null">
+                            <ng-container *ngIf="chatSelected.open">
                                 <!-- Chat -->
                                 <div class="col-12 col-sm-12 col-md-8 col-lg-8 chats">
                                     <!-- chat header -->
                                     <div class="row chat-header">
-                                        <div class="col-12 col-sm-12 col-md-2 col-lg-2 avatar">
+                                        <div class="col-12 col-sm-12 col-md-3 col-lg-3 avatar">
                                             <img [src]="'assets/img/user.png'" />
-                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">Test</h4>
+                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">{{ chatSelected.chat_name
+                                                }}</h4>
                                         </div>
                                     </div>
                                     <!-- Chat content -->
-                                    <div class="row chat-content">
-                                        <!-- Receiver -->
-                                        <div class="col-12 receiver">
-                                            <div class="box-chat-content box-shadow">
-                                                <p class="message">
-                                                    Recibiendo mensaje
-                                                    <span class="message-timelog">6:04pm</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!-- Sender -->
-                                        <div class="col-12 sender">
-                                            <div class="box-chat-content box-shadow">
-                                                <p class="message">
-                                                    Mandando mensaje
-                                                    <span class="message-timelog">6:04pm</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!-- Last message -->
-                                        <div class="last-message-box"></div>
+                                    <div class="row chat-content" #messageContent [scrollTop]="scrollDown">
+                                        <ng-container *ngFor="let chat of chatSelected.logs">
+                                            <ng-container *ngIf="chat.sender_id !== user.id">
+                                                <!-- Receiver -->
+                                                <div class="col-12 receiver">
+                                                    <div class="box-chat-content box-shadow">
+                                                        <p class="message">
+                                                            {{ chat.message }}
+                                                            <span class="message-timelog">{{
+                                                                moment(chat.created_at).format('h:mm a') }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="chat.sender_id === user.id">
+                                                <!-- Sender -->
+                                                <div class="col-12 sender">
+                                                    <div class="box-chat-content box-shadow">
+                                                        <p class="message">
+                                                            {{ chat.message }}
+                                                            <span class="message-timelog">{{
+                                                                moment(chat.created_at).format('h:mm a') }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            <!-- Last message -->
+                                            <div class="last-message-box"></div>
+                                        </ng-container>
                                     </div>
                                     <!-- Chat to type message -->
                                     <div class="row box-message">
@@ -99,7 +113,8 @@
                                             <form [formGroup]="message" autocomplete="on">
                                                 <mat-form-field class="inputType" appearance="outline">
                                                     <input matInput formControlName="message" name="message" type="text"
-                                                        placeholder="Escribe un mensaje aquí" required="false">
+                                                        placeholder="Escribe un mensaje aquí" required="false"
+                                                        (keyup.enter)="newMessage()">
                                                     <mat-icon matSuffix>search</mat-icon>
                                                 </mat-form-field>
                                             </form>

@@ -1,5 +1,5 @@
 // Sockets
-import { SocketsService } from './sockets/sockets.service';
+import { PatientSocketsService } from './sockets/patient/sockets.service';
 
 // Services
 import { LoginService } from './login/login.service';
@@ -16,7 +16,7 @@ import {
 } from './patient';
 
 export {
-    SocketsService,
+    PatientSocketsService,
     LoginService,
     AuthService,
     PetitionService,
