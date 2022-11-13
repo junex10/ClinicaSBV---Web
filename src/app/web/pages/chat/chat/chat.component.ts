@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService, PatientChatService } from 'src/app/services';
+import * as moment from 'moment';
+import { ENVIRONMENT } from 'src/app/shared';
 
 @Component({
   selector: 'app-chat',
@@ -17,13 +19,15 @@ export class ChatComponent implements OnInit {
   actualTab: number = this.TABS.CHATS;
   form: FormGroup;
   message: FormGroup;
+  moment = moment;
+  env = ENVIRONMENT;
 
   chatSelected = null;
   isEmojiPickerVisible: boolean = false;
 
   user = this.auth.getUser()?.user;
 
-  chats: [] = [];
+  chats: any;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +50,7 @@ export class ChatComponent implements OnInit {
     this.chat.getChats({ user_id }).subscribe(
       (logs) => {
         this.chats = (logs as { chats: [] })?.chats;
+        console.log(this.chats)
       }
     )
   }
