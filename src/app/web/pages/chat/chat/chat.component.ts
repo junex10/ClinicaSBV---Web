@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit {
 
   chats: any;
 
-  scrollDown: any;
+  scrollDown: number = 0;
 
   constructor(
     private fb: FormBuilder,
