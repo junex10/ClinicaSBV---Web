@@ -57,51 +57,53 @@
                                     </div>
                                 </ng-container>
                             </div>
-                            <!-- Chat -->
-                            <div class="col-12 col-sm-12 col-md-8 col-lg-8 chats">
-                                <!-- chat header -->
-                                <div class="row chat-header">
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 avatar">
-                                        <img [src]="'assets/img/user.png'" />
-                                        <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">Test</h4>
-                                    </div>
-                                </div>
-                                <!-- Chat content -->
-                                <div class="row chat-content">
-                                    <!-- Receiver -->
-                                    <div class="col-12 receiver">
-                                        <div class="box-chat-content box-shadow">
-                                            <p class="message">
-                                                Recibiendo mensaje
-                                                <span class="message-timelog">6:04pm</span>
-                                            </p>
+                            <ng-container *ngIf="chatSelected !== null">
+                                <!-- Chat -->
+                                <div class="col-12 col-sm-12 col-md-8 col-lg-8 chats">
+                                    <!-- chat header -->
+                                    <div class="row chat-header">
+                                        <div class="col-12 col-sm-12 col-md-2 col-lg-2 avatar">
+                                            <img [src]="'assets/img/user.png'" />
+                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">Test</h4>
                                         </div>
                                     </div>
-                                    <!-- Sender -->
-                                    <div class="col-12 sender">
-                                        <div class="box-chat-content box-shadow">
-                                            <p class="message">
-                                                Mandando mensaje
-                                                <span class="message-timelog">6:04pm</span>
-                                            </p>
+                                    <!-- Chat content -->
+                                    <div class="row chat-content">
+                                        <!-- Receiver -->
+                                        <div class="col-12 receiver">
+                                            <div class="box-chat-content box-shadow">
+                                                <p class="message">
+                                                    Recibiendo mensaje
+                                                    <span class="message-timelog">6:04pm</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- Sender -->
+                                        <div class="col-12 sender">
+                                            <div class="box-chat-content box-shadow">
+                                                <p class="message">
+                                                    Mandando mensaje
+                                                    <span class="message-timelog">6:04pm</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- Last message -->
+                                        <div class="last-message-box"></div>
+                                    </div>
+                                    <!-- Chat to type message -->
+                                    <div class="row box-message">
+                                        <div class="col-12">
+                                            <form [formGroup]="message" autocomplete="on">
+                                                <mat-form-field class="inputType" appearance="outline">
+                                                    <input matInput formControlName="message" name="message" type="text"
+                                                        placeholder="Escribe un mensaje aquí" required="false">
+                                                    <mat-icon matSuffix>search</mat-icon>
+                                                </mat-form-field>
+                                            </form>
                                         </div>
                                     </div>
-                                    <!-- Last message -->
-                                    <div class="last-message-box"></div>
                                 </div>
-                                <!-- Chat to type message -->
-                                <div class="row box-message">
-                                    <div class="col-12">
-                                        <form [formGroup]="message" autocomplete="on">
-                                            <mat-form-field class="inputType" appearance="outline">
-                                                <input matInput formControlName="message" name="message" type="text"
-                                                    placeholder="Escribe un mensaje aquí" required="false">
-                                                <mat-icon matSuffix>search</mat-icon>
-                                            </mat-form-field>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>

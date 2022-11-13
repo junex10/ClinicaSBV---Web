@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService, PatientChatService } from 'src/app/services';
 
 @Component({
   selector: 'app-chat',
@@ -17,11 +18,17 @@ export class ChatComponent implements OnInit {
   form: FormGroup;
   message: FormGroup;
 
-  chatSelected = {};
+  chatSelected = null;
   isEmojiPickerVisible: boolean = false;
 
+  user = this.auth.getUser()?.user;
+
+  chats: [] = [];
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private chat: PatientChatService,
+    private auth: AuthService
   ) { 
     this.form = this.fb.group({
       search: [null]
@@ -32,13 +39,18 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getChats(this.user.id);
+  }
+
+  getChats = (user_id: number) => {
+    this.chat.getChats({ user_id }).subscribe(
+      (logs) => {
+        this.chats = (logs as { chats: [] })?.chats;
+      }
+    )
   }
 
   tab = (tab: number) => this.actualTab = tab;
-
-  addEmoji = ($event: any) => {
-    console.log($event)
-  }
 
   get search() { return this.form.get('search')?.value }
   get message_form() { return this.message.get('message')?.value }

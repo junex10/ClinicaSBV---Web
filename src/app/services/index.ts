@@ -11,7 +11,8 @@ import { OperationService } from './operations/operations.service';
 // Patients
 import { 
     AssociatesService,
-    AppointmentsService
+    AppointmentsService,
+    PatientChatService
 } from './patient';
 
 export {
@@ -20,7 +21,9 @@ export {
     AuthService,
     PetitionService,
     ProfileService,
-    AssociatesService,
     OperationService,
-    AppointmentsService
+    
+    AssociatesService,
+    AppointmentsService,
+    PatientChatService
 }

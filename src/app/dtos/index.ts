@@ -49,7 +49,14 @@ import {
 import {
     GetSpecializationsDTO,
     GetDoctorsDTO,
-    GetDatesToHideDTO
+    GetDatesToHideDTO,
+
+    PatientGetChatsDTO,
+    PatientNewChatDTO,
+    PatientNewMessageDTO,
+    PatientGetLogsDTO,
+    PatientDeleteDTO,
+    PatientViewedDTO
 } from './resources/patient.dto';
 
 import {
@@ -77,5 +84,11 @@ export {
     SelectDTO,
     GetDatesToHideDTO,
     RegisterAppointmentDTO,
-    PaginationDTO
+    PaginationDTO,
+    PatientGetChatsDTO,
+    PatientNewChatDTO,
+    PatientNewMessageDTO,
+    PatientGetLogsDTO,
+    PatientDeleteDTO,
+    PatientViewedDTO
 };
