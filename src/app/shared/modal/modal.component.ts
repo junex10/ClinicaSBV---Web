@@ -10,7 +10,7 @@ import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 export class ModalComponent implements OnChanges {
 
   @Input('title') title: string = 'Modal';
-  @Input('acceptButton') acceptButton: string | null = 'Aceptar';
+  @Input('acceptButton') acceptButton: string | null = null;
   @Input('closeButton') closeButton: string | null = null;
   @Input('showModal') showModal: boolean = false;
   @Input('styles') styles: NgbModalOptions = {};

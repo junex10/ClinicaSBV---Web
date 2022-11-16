@@ -4,6 +4,9 @@ import { AuthService, PatientChatService, PatientSocketsService } from 'src/app/
 import * as moment from 'moment';
 import { ENVIRONMENT } from 'src/app/shared';
 import SocketEvents from 'src/app/services/sockets/patient/sockets.events';
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from 'src/app/helpers';
+
 
 @Component({
   selector: 'app-chat',
@@ -18,10 +21,15 @@ export class ChatComponent implements OnInit {
   };
 
   @ViewChild('messageContent', { read: ElementRef }) messageContent: any;
+  @ViewChild('fileInput') fileInput: any;
 
   actualTab: number = this.TABS.CHATS;
+
   form: FormGroup;
-  message: FormGroup;
+  formMessage: FormGroup;
+  formAttachment: FormGroup;
+  formMessageWithFile: FormGroup;
+
   moment = moment;
   env = ENVIRONMENT;
 
@@ -35,19 +43,31 @@ export class ChatComponent implements OnInit {
   user = this.auth.getUser()?.user;
 
   chats: any;
-
   scrollDown: number = 0;
+
+  selecteFileModal: NgbModalOptions = {
+    size: 'xl'
+  };
+  openFileModal: boolean = false;
+  getSelectedFile: string = '';
 
   constructor(
     private fb: FormBuilder,
     private chat: PatientChatService,
     private auth: AuthService,
     private socket: PatientSocketsService
-  ) { 
+  ) {
     this.form = this.fb.group({
       search: [null]
     });
-    this.message = this.fb.group({
+    this.formMessage = this.fb.group({
+      message: [null]
+    });
+    this.formAttachment = this.fb.group({
+      file: [null]
+    })
+    this.formMessageWithFile = this.fb.group({
+      file: [[]],
       message: [null]
     })
   }
@@ -100,6 +120,47 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  onFileSelected = () => {
+    const inputNode = this.fileInput.nativeElement.files[0];
+    const mimeString = inputNode.type;
+    this.processFile(inputNode, mimeString)
+    .then((file: any) => {
+      this.openFileModal = true;
+      const addFile = [...this.formMessageWithFile.get('file')?.value, file];
+      this.formMessageWithFile.get('file')?.setValue(addFile);
+      this.getSelectedFile = file?.base64;
+    })
+  }
+
+  private processFile = (inputNode: any, mimeString: string) => (
+    new Promise((resolve) => {
+      let srcResult: any[] = [];
+
+      if (typeof (FileReader) !== 'undefined') {
+        const reader = new FileReader();
+        let imageFile;
+
+        reader.onload = (file: any) => {
+          srcResult = file.target.result;
+          imageFile = {
+            name: inputNode.name,
+            size: inputNode.size,
+            blob: new Blob([new Uint8Array(srcResult)], { type: mimeString }),
+            base64: `data:image/png;base64,${Globals.uint8ToBase64(srcResult)}`,
+            type: mimeString
+          };
+          resolve(imageFile);
+        };
+        reader.readAsArrayBuffer(inputNode);
+      }
+    })
+  )
+
+  acceptFile = () => {
+    console.log('hey')
+  }
+
   get search() { return this.form.get('search')?.value }
-  get message_form() { return this.message.get('message')?.value }
+  get message_form() { return this.formMessage.get('message')?.value }
+  get selectedFile() { return this.formMessageWithFile.get('file')?.value }
 }

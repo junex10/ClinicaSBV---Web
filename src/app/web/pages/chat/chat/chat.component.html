@@ -1,4 +1,45 @@
 <app-header></app-header>
+<app-modal
+    title=""
+    [showModal]="openFileModal"
+    (close)="this.openFileModal = false"
+    [styles]="selecteFileModal"
+    (accept)="acceptFile()"
+>
+    <ng-container>
+       <form [formGroup]="formMessageWithFile" (submit)="acceptFile()">
+            <div class="d-block m-auto">
+                <img [src]="getSelectedFile" class="selectedFile">
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field class="inputType m-auto d-block mb-4 w-75" appearance="standard" [ngStyle]="{'background': '#FFFFFF'}">
+                        <textarea matInput placeholder="Escribe un mensaje" formControlName="message" required="false"></textarea>
+                    </mat-form-field>
+                </div>
+                <hr class="line" />
+                <div class="row col-12 mt-4 mb-4">
+                    <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of selectedFile">
+                        <img [src]="item.base64" width="75" height="75" class="fileSelected">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-info d-block m-auto" [ngStyle]="{'cursor': 'pointer'}" (click)="addFileInput.click()">
+                        <form [formGroup]="formAttachment" autocomplete="off">
+                            <mat-icon matSuffix>add</mat-icon>
+                            <input hidden #addFileInput type="file" (change)="onFileSelected()" id="file" formControlName="file">
+                        </form>
+                    </button>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-success">
+                        <mat-icon matSuffix>send</mat-icon>
+                    </button>
+                </div>
+            </div>
+       </form>
+    </ng-container>
+</app-modal>
 <div class="g-sidenav-show bg-gray-200 h-100">
     <div class="main-content position-relative max-height-vh-100 h-100">
         <!-- Navbar -->
@@ -25,6 +66,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row col-4 mt-2" [ngStyle]="{'margin-left': '0px'}">
+                        <div class="col-2">
+                            <img [src]="'assets/img/user.png'" class="avatar" />
+                        </div>
+                        <div class="col-10" [ngStyle]="{'position': 'relative', 'top': '13px'}">
+                            {{ user.person.name }} {{ user.person.lastname }}
+                        </div>
+                    </div>
                     <!-- Search bar -->
                     <div class="search-bar pl-4">
                         <form [formGroup]="form" autocomplete="on">
@@ -43,21 +92,20 @@
                                         <div class="col-12 item-chat" *ngFor="let value of chats"
                                             (click)="select_chat(value.item.chat_session.id)">
                                             <div class="row">
-                                                <div class="col-2 avatar"
+                                                <div class="col-12 col-sm-12 col-lg-2 avatar"
                                                     *ngIf="value.item.chat_session.attachment !== null">
                                                     <img [src]="env.storage + value.item.chat_session.attachment" />
                                                 </div>
-                                                <div class="col-2 avatar"
+                                                <div class="col-12 col-sm-12 col-lg-2 avatar"
                                                     *ngIf="value.item.chat_session.attachment == null">
                                                     <img [src]="'assets/img/user.png'" />
                                                 </div>
-                                                <div class="col-5">
+                                                <div class="col-12 col-sm-12 col-lg-5">
                                                     <h4 class="title_chat">{{ value.item.chat_session.name }}</h4>
                                                     <p class="last_message">{{ value.lastMessage }}</p>
                                                 </div>
-                                                <div class="col-4">
-                                                    <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a')
-                                                        }}</p>
+                                                <div class="col-12 col-sm-12 col-lg-4">
+                                                    <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -71,8 +119,7 @@
                                     <div class="row chat-header">
                                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 avatar">
                                             <img [src]="'assets/img/user.png'" />
-                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">{{ chatSelected.chat_name
-                                                }}</h4>
+                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">{{ chatSelected.chat_name }}</h4>
                                         </div>
                                     </div>
                                     <!-- Chat content -->
@@ -109,14 +156,20 @@
                                     </div>
                                     <!-- Chat to type message -->
                                     <div class="row box-message">
-                                        <div class="col-12">
-                                            <form [formGroup]="message" autocomplete="on">
+                                        <div class="col-12 col-sm-10 col-md-10 col-lg-10">
+                                            <form [formGroup]="formMessage" autocomplete="on">
                                                 <mat-form-field class="inputType" appearance="outline">
                                                     <input matInput formControlName="message" name="message" type="text"
-                                                        placeholder="Escribe un mensaje aquí" required="false"
+                                                        placeholder="Escribe un mensaje aquí" class="input" required="false"
                                                         (keyup.enter)="newMessage()">
                                                     <mat-icon matSuffix>search</mat-icon>
                                                 </mat-form-field>
+                                            </form>
+                                        </div>
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 mt-4" [ngStyle]="{'cursor': 'pointer'}" (click)="fileInput.click()">
+                                            <form [formGroup]="formAttachment" autocomplete="off">
+                                                <mat-icon matSuffix>attach_file</mat-icon>
+                                                <input hidden #fileInput type="file" (change)="onFileSelected()" id="file" formControlName="file">
                                             </form>
                                         </div>
                                     </div>
