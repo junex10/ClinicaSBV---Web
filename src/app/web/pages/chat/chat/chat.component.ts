@@ -21,13 +21,13 @@ export class ChatComponent implements OnInit {
   };
 
   @ViewChild('messageContent', { read: ElementRef }) messageContent: any;
-  @ViewChild('fileInput') fileInput: any;
+  @ViewChild('addFileInput') addFileInput: any;
+  @ViewChild('message') inputMessage: ElementRef | undefined;
 
   actualTab: number = this.TABS.CHATS;
 
   form: FormGroup;
   formMessage: FormGroup;
-  formAttachment: FormGroup;
   formMessageWithFile: FormGroup;
 
   moment = moment;
@@ -50,6 +50,7 @@ export class ChatComponent implements OnInit {
   };
   openFileModal: boolean = false;
   getSelectedFile: string = '';
+  selectedFiles: { base64: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -63,12 +64,10 @@ export class ChatComponent implements OnInit {
     this.formMessage = this.fb.group({
       message: [null]
     });
-    this.formAttachment = this.fb.group({
-      file: [null]
-    })
     this.formMessageWithFile = this.fb.group({
       file: [[]],
-      message: [null]
+      message: [null],
+      tmp_file: [[]]
     })
   }
 
@@ -107,7 +106,7 @@ export class ChatComponent implements OnInit {
   newMessage = () => {
     const message = this.message_form;
     this.socket.newMessage(message, this.user.id, this.chatSelected.session_id);
-    this.form.get('message')?.setValue('');
+    this.form.reset();
   }
 
   searchChats = () => {
@@ -121,46 +120,51 @@ export class ChatComponent implements OnInit {
   }
 
   onFileSelected = () => {
-    const inputNode = this.fileInput.nativeElement.files[0];
+    const inputNode = this.addFileInput.nativeElement.files[0];
     const mimeString = inputNode.type;
     this.processFile(inputNode, mimeString)
-    .then((file: any) => {
-      this.openFileModal = true;
-      const addFile = [...this.formMessageWithFile.get('file')?.value, file];
-      this.formMessageWithFile.get('file')?.setValue(addFile);
-      this.getSelectedFile = file?.base64;
-    })
+      .then((file: any) => {
+        const addFiles = this.selectedFile;
+        addFiles.push(file);
+        this.formMessageWithFile.get('file')?.setValue(addFiles);
+        this.getSelectedFile = file?.base64;
+        this.selectedFiles = addFiles;
+      })
   }
 
   private processFile = (inputNode: any, mimeString: string) => (
     new Promise((resolve) => {
       let srcResult: any[] = [];
-
-      if (typeof (FileReader) !== 'undefined') {
-        const reader = new FileReader();
-        let imageFile;
-
-        reader.onload = (file: any) => {
-          srcResult = file.target.result;
-          imageFile = {
-            name: inputNode.name,
-            size: inputNode.size,
-            blob: new Blob([new Uint8Array(srcResult)], { type: mimeString }),
-            base64: `data:image/png;base64,${Globals.uint8ToBase64(srcResult)}`,
-            type: mimeString
-          };
-          resolve(imageFile);
+      const reader = new FileReader();
+      let imageFile;
+      reader.onload = (file: any) => {
+        srcResult = file.target.result;
+        imageFile = {
+          name: inputNode.name,
+          size: inputNode.size,
+          blob: new Blob([new Uint8Array(srcResult)], { type: mimeString }),
+          base64: `data:image/png;base64,${Globals.uint8ToBase64(srcResult)}`,
+          type: mimeString
         };
-        reader.readAsArrayBuffer(inputNode);
-      }
+        resolve(imageFile);
+      };
+      reader.readAsArrayBuffer(inputNode);
     })
   )
 
   acceptFile = () => {
-    console.log('hey')
+    const message = this.formMessageWithFile.get('message')?.value;
+    const attachments = this.formMessageWithFile.get('file')?.value.map((item: unknown) => ((item as { blob: Blob })?.blob));
+
+    this.chat.newMessage({ sender_id: this.user.id, message, session_id: this.chatSelected.session_id, attachments, formData: true }).subscribe(
+      (data) => {
+        console.log(data, ' -> hey')
+      }
+    )
   }
 
   get search() { return this.form.get('search')?.value }
   get message_form() { return this.formMessage.get('message')?.value }
   get selectedFile() { return this.formMessageWithFile.get('file')?.value }
+  get principal_form_message() { return this.form.get('message')?.value }
 }

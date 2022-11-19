@@ -7,7 +7,7 @@
     (accept)="acceptFile()"
 >
     <ng-container>
-       <form [formGroup]="formMessageWithFile" (submit)="acceptFile()">
+       <form [formGroup]="formMessageWithFile">
             <div class="d-block m-auto">
                 <img [src]="getSelectedFile" class="selectedFile">
             </div>
@@ -17,22 +17,19 @@
                         <textarea matInput placeholder="Escribe un mensaje" formControlName="message" required="false"></textarea>
                     </mat-form-field>
                 </div>
-                <hr class="line" />
                 <div class="row col-12 mt-4 mb-4">
-                    <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of selectedFile">
+                    <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of selectedFiles">
                         <img [src]="item.base64" width="75" height="75" class="fileSelected">
                     </div>
                 </div>
                 <div class="mt-4">
                     <button class="btn btn-info d-block m-auto" [ngStyle]="{'cursor': 'pointer'}" (click)="addFileInput.click()">
-                        <form [formGroup]="formAttachment" autocomplete="off">
-                            <mat-icon matSuffix>add</mat-icon>
-                            <input hidden #addFileInput type="file" (change)="onFileSelected()" id="file" formControlName="file">
-                        </form>
+                        <mat-icon matSuffix>add</mat-icon>
+                        <input hidden #addFileInput type="file" (change)="onFileSelected()" id="tmp_file" formControlName="tmp_file">
                     </button>
                 </div>
-                <div class="col-12">
-                    <button class="btn btn-success">
+                <div class="d-flex mt-4" (click)="acceptFile()">
+                    <button class="btn btn-success ml-auto">
                         <mat-icon matSuffix>send</mat-icon>
                     </button>
                 </div>
@@ -157,20 +154,17 @@
                                     <!-- Chat to type message -->
                                     <div class="row box-message">
                                         <div class="col-12 col-sm-10 col-md-10 col-lg-10">
-                                            <form [formGroup]="formMessage" autocomplete="on">
+                                            <form [formGroup]="formMessage" autocomplete="off">
                                                 <mat-form-field class="inputType" appearance="outline">
                                                     <input matInput formControlName="message" name="message" type="text"
                                                         placeholder="Escribe un mensaje aquí" class="input" required="false"
-                                                        (keyup.enter)="newMessage()">
+                                                        (keyup.enter)="newMessage()" #message>
                                                     <mat-icon matSuffix>search</mat-icon>
                                                 </mat-form-field>
                                             </form>
                                         </div>
-                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 mt-4" [ngStyle]="{'cursor': 'pointer'}" (click)="fileInput.click()">
-                                            <form [formGroup]="formAttachment" autocomplete="off">
-                                                <mat-icon matSuffix>attach_file</mat-icon>
-                                                <input hidden #fileInput type="file" (change)="onFileSelected()" id="file" formControlName="file">
-                                            </form>
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 mt-4" [ngStyle]="{'cursor': 'pointer'}" (click)="this.openFileModal = true">
+                                            <mat-icon matSuffix>attach_file</mat-icon>
                                         </div>
                                     </div>
                                 </div>

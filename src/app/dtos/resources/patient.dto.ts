@@ -32,6 +32,8 @@ export interface PatientNewMessageDTO {
     sender_id: number;
     message: string;
     session_id: number;
+    attachments?: any[];
+    formData?: boolean;
 }
 export interface PatientGetLogsDTO{
     chat_session_id: number;

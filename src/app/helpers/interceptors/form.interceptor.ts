@@ -20,7 +20,7 @@ export class FormInterceptor implements HttpInterceptor {
                             }
                         }
                         else {
-                            formdata.append(key + '[' + _key + ']', body[key][_key]);
+                            formdata.append(`${key}`, body[key][_key]);
                         }
                     }
                 }
