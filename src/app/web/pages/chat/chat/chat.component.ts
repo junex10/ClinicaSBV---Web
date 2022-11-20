@@ -50,7 +50,7 @@ export class ChatComponent implements OnInit {
   };
   openFileModal: boolean = false;
   getSelectedFile: string = '';
-  selectedFiles: { base64: string }[] = [];
+  selectedFiles: { base64: string, index: number, selected: boolean }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -122,17 +122,16 @@ export class ChatComponent implements OnInit {
   onFileSelected = () => {
     const inputNode = this.addFileInput.nativeElement.files[0];
     const mimeString = inputNode.type;
-    this.processFile(inputNode, mimeString)
+    this.processFile(inputNode, mimeString, this.selectedFile.length)
       .then((file: any) => {
         const addFiles = this.selectedFile;
         addFiles.push(file);
         this.formMessageWithFile.get('file')?.setValue(addFiles);
         this.getSelectedFile = file?.base64;
-        this.selectedFiles = addFiles;
       })
   }
 
-  private processFile = (inputNode: any, mimeString: string) => (
+  private processFile = (inputNode: any, mimeString: string, index: number) => (
     new Promise((resolve) => {
       let srcResult: any[] = [];
       const reader = new FileReader();
@@ -144,7 +143,9 @@ export class ChatComponent implements OnInit {
           size: inputNode.size,
           blob: new Blob([new Uint8Array(srcResult)], { type: mimeString }),
           base64: `data:image/png;base64,${Globals.uint8ToBase64(srcResult)}`,
-          type: mimeString
+          type: mimeString,
+          index,
+          selected: true
         };
         resolve(imageFile);
       };
@@ -161,6 +162,13 @@ export class ChatComponent implements OnInit {
         console.log(data, ' -> hey')
       }
     )
+  }
+
+  imageToView = (item: unknown) => {
+    const data = (item as { index: number, base64: string });
+    const newSelected = this.selectedFiles.map(item => ( item.index === data.index ? { ...item, selected: true } : { ...item, selected: false } ));
+    this.selectedFiles = newSelected;
+    this.getSelectedFile = data.base64;
   }
 
   get search() { return this.form.get('search')?.value }

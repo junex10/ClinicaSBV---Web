@@ -19,7 +19,7 @@
                 </div>
                 <div class="row col-12 mt-4 mb-4">
                     <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of selectedFiles">
-                        <img [src]="item.base64" width="75" height="75" class="fileSelected">
+                        <img [src]="item.base64" width="75" height="75" [ngClass]="{'fileSelected': item.selected}" (click)="imageToView(item)">
                     </div>
                 </div>
                 <div class="mt-4">
