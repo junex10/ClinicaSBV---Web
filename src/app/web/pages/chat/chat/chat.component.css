@@ -156,3 +156,18 @@
 .fileSelected {
     border: 3px solid var(--success);
 }
+.addButton{
+    position: 'relative';
+    top: 50px;
+    cursor: pointer;
+}
+.user_item{
+    cursor: pointer;
+}
+.user_item:hover{
+    background-color: var(--success);
+    transition: .3s;
+}
+.avatar-box{
+    width: 55px;
+}

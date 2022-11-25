@@ -11,5 +11,6 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="onAccept()" *ngIf="acceptButton != null">{{ acceptButton }}</button>
         <button type="button" class="btn btn-danger" (click)="onCancel()" *ngIf="closeButton != null">{{ closeButton }}</button>
+        <button type="button" class="btn btn-success" (click)="onAccept()" *ngIf="sendButton != null"><mat-icon matSuffix>send</mat-icon></button>
     </div>
 </ng-template>

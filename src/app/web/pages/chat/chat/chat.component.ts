@@ -1,12 +1,20 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, PatientChatService, PatientSocketsService } from 'src/app/services';
 import * as moment from 'moment';
 import { ENVIRONMENT } from 'src/app/shared';
 import SocketEvents from 'src/app/services/sockets/patient/sockets.events';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from 'src/app/helpers';
+import Swal from 'sweetalert2';
+import swalCommon from 'src/app/shared/commons/swal.common';
 
+interface UsersList {
+  id: number,
+  photo: string,
+  level: { name: string },
+  person: { id: number, name: string, lastname: string }
+}
 
 @Component({
   selector: 'app-chat',
@@ -15,16 +23,9 @@ import { Globals } from 'src/app/helpers';
 })
 export class ChatComponent implements OnInit {
 
-  TABS = {
-    CHATS: 1,
-    GROUPS: 2
-  };
-
   @ViewChild('messageContent', { read: ElementRef }) messageContent: any;
   @ViewChild('addFileInput') addFileInput: any;
   @ViewChild('message') inputMessage: ElementRef | undefined;
-
-  actualTab: number = this.TABS.CHATS;
 
   form: FormGroup;
   formMessage: FormGroup;
@@ -36,6 +37,7 @@ export class ChatComponent implements OnInit {
   chatSelected = {
     logs: <{ message: string, created_at: string, id: number, sender_id: number }[]>[],
     chat_name: '',
+    photo: <string | null>null,
     open: false,
     session_id: 0
   };
@@ -44,6 +46,7 @@ export class ChatComponent implements OnInit {
 
   chats: any;
   scrollDown: number = 0;
+  openSearchChat: boolean = false;
 
   selecteFileModal: NgbModalOptions = {
     size: 'xl'
@@ -51,6 +54,8 @@ export class ChatComponent implements OnInit {
   openFileModal: boolean = false;
   getSelectedFile: string = '';
   selectedFiles: { base64: string, index: number, selected: boolean }[] = [];
+
+  usersList: UsersList[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -65,8 +70,8 @@ export class ChatComponent implements OnInit {
       message: [null]
     });
     this.formMessageWithFile = this.fb.group({
-      file: [[]],
-      message: [null],
+      file: [[], Validators.required],
+      message: [null, Validators.required],
       tmp_file: [[]]
     })
   }
@@ -76,6 +81,7 @@ export class ChatComponent implements OnInit {
     this.socket.on(SocketEvents.CHAT.NEW_MESSAGE, (data) => {
       const newLogs = data as { message: string, created_at: string, id: number, sender_id: number };
       this.chatSelected.logs = [...this.chatSelected.logs, newLogs];
+      console.log(data, ' AEGIS ')
     });
   }
 
@@ -87,8 +93,6 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  tab = (tab: number) => this.actualTab = tab;
-
   select_chat = (chat_session_id: number) => {
     this.chat.getLogs({ chat_session_id }).subscribe(
       logs => {
@@ -96,6 +100,7 @@ export class ChatComponent implements OnInit {
           logs: (logs as { chats: { logs: [] } }).chats.logs,
           chat_name: (logs as { chats: { chat_name: string } }).chats.chat_name,
           open: true,
+          photo: (logs as { chats: { photo: string } }).chats.photo,
           session_id: chat_session_id
         };
         setTimeout(() => this.scrollDown = this.messageContent.nativeElement.scrollHeight, 600);
@@ -128,6 +133,7 @@ export class ChatComponent implements OnInit {
         addFiles.push(file);
         this.formMessageWithFile.get('file')?.setValue(addFiles);
         this.getSelectedFile = file?.base64;
+        this.selectedFiles = addFiles;
       })
   }
 
@@ -145,7 +151,7 @@ export class ChatComponent implements OnInit {
           base64: `data:image/png;base64,${Globals.uint8ToBase64(srcResult)}`,
           type: mimeString,
           index,
-          selected: true
+          selected: false
         };
         resolve(imageFile);
       };
@@ -154,21 +160,42 @@ export class ChatComponent implements OnInit {
   )
 
   acceptFile = () => {
+    if (this.formMessageWithFile.invalid) {
+      Swal.fire(swalCommon.swalError('', 'Debe adjuntar por lo menos 1 imagen y un mensaje a enviar'));
+      return;
+    }
+
     const message = this.formMessageWithFile.get('message')?.value;
     const attachments = this.formMessageWithFile.get('file')?.value.map((item: unknown) => ((item as { blob: Blob })?.blob));
-
     this.chat.newMessage({ sender_id: this.user.id, message, session_id: this.chatSelected.session_id, attachments, formData: true }).subscribe(
       (data) => {
-        console.log(data, ' -> hey')
+        const newLogs = (data as { message: { message: string, created_at: string, id: number, sender_id: number }}).message;
+        this.chatSelected.logs = [...this.chatSelected.logs, { ...newLogs, sender_id: Number(newLogs.sender_id) }];
+
+        this.formMessageWithFile.get('message')?.reset();
+        this.formMessageWithFile.get('file')?.reset();
+        this.selectedFiles = [];
+        this.getSelectedFile = '';
+
+        this.openFileModal = false;
       }
     )
   }
 
   imageToView = (item: unknown) => {
     const data = (item as { index: number, base64: string });
-    const newSelected = this.selectedFiles.map(item => ( item.index === data.index ? { ...item, selected: true } : { ...item, selected: false } ));
+    const newSelected = this.selectedFiles.map(item => (item.index === data.index ? { ...item, selected: true } : { ...item, selected: false }));
     this.selectedFiles = newSelected;
     this.getSelectedFile = data.base64;
+  }
+
+  addChat = () => {
+    this.chat.getUsers().subscribe(
+      (data) => {
+        this.usersList = (data as { users: [] }).users;
+        this.openSearchChat = true;
+      }
+    )
   }
 
   get search() { return this.form.get('search')?.value }

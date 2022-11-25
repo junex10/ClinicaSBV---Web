@@ -1,40 +1,53 @@
 <app-header></app-header>
-<app-modal
-    title=""
-    [showModal]="openFileModal"
-    (close)="this.openFileModal = false"
-    [styles]="selecteFileModal"
-    (accept)="acceptFile()"
->
+<app-modal title="" [showModal]="openFileModal" (close)="this.openFileModal = false" [styles]="selecteFileModal"
+    (accept)="acceptFile()" sendButton="true">
     <ng-container>
-       <form [formGroup]="formMessageWithFile">
+        <form [formGroup]="formMessageWithFile">
             <div class="d-block m-auto">
                 <img [src]="getSelectedFile" class="selectedFile">
             </div>
             <div class="row">
                 <div class="col-12">
-                    <mat-form-field class="inputType m-auto d-block mb-4 w-75" appearance="standard" [ngStyle]="{'background': '#FFFFFF'}">
-                        <textarea matInput placeholder="Escribe un mensaje" formControlName="message" required="false"></textarea>
+                    <mat-form-field class="inputType m-auto d-block mb-4 w-75" appearance="standard"
+                        [ngStyle]="{'background': '#FFFFFF'}">
+                        <textarea matInput placeholder="Escribe un mensaje" formControlName="message"
+                            required="false"></textarea>
                     </mat-form-field>
                 </div>
                 <div class="row col-12 mt-4 mb-4">
                     <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of selectedFiles">
-                        <img [src]="item.base64" width="75" height="75" [ngClass]="{'fileSelected': item.selected}" (click)="imageToView(item)">
+                        <img [src]="item.base64" width="75" height="75" [ngClass]="{'fileSelected': item.selected}"
+                            (click)="imageToView(item)">
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button class="btn btn-info d-block m-auto" [ngStyle]="{'cursor': 'pointer'}" (click)="addFileInput.click()">
+                    <button class="btn btn-info d-block m-auto" [ngStyle]="{'cursor': 'pointer'}"
+                        (click)="addFileInput.click()">
                         <mat-icon matSuffix>add</mat-icon>
-                        <input hidden #addFileInput type="file" (change)="onFileSelected()" id="tmp_file" formControlName="tmp_file">
-                    </button>
-                </div>
-                <div class="d-flex mt-4" (click)="acceptFile()">
-                    <button class="btn btn-success ml-auto">
-                        <mat-icon matSuffix>send</mat-icon>
+                        <input hidden #addFileInput type="file" (change)="onFileSelected()" id="tmp_file"
+                            formControlName="tmp_file">
                     </button>
                 </div>
             </div>
-       </form>
+        </form>
+    </ng-container>
+</app-modal>
+<app-modal title="Usuarios" [showModal]="openSearchChat" (close)="this.openSearchChat = false" [styles]="selecteFileModal">
+    <ng-container>
+        <div class="row">
+            <ng-container *ngFor="let item of usersList">
+                <div class="user_item row col-12 ml-0 pt-2 pb-2">
+                    <div class="col-2">
+                        <div class="avatar-box">
+                            <img [src]="item.photo ? env.storage + item.photo : 'assets/img/user.png'" class="m-auto d-block avatar" />
+                        </div>
+                    </div>
+                    <div class="col-10" [ngStyle]="{'position': 'relative', 'top': '13px'}">
+                        {{ item.person.name }} {{ item.person.lastname }}
+                    </div>
+                </div>
+            </ng-container>
+        </div>
     </ng-container>
 </app-modal>
 <div class="g-sidenav-show bg-gray-200 h-100">
@@ -51,24 +64,17 @@
         <div class="container-fluid px-2 px-md-4" [ngStyle]="{'position': 'relative', 'top': '20px'}">
             <div class="col-12 mt-4">
                 <div class="card card-plain h-100">
-                    <div class="card-body tabs">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 item-list"
-                                [ngClass]="{'item-selected': actualTab === TABS.CHATS }" (click)="tab(TABS.CHATS)">
-                                <h2>MIS CHATS</h2>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 item-list"
-                                [ngClass]="{'item-selected': actualTab === TABS.GROUPS }" (click)="tab(TABS.GROUPS)">
-                                <h2>MIS GRUPOS</h2>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row col-4 mt-2" [ngStyle]="{'margin-left': '0px'}">
                         <div class="col-2">
-                            <img [src]="'assets/img/user.png'" class="avatar" />
+                            <img [src]="user.photo ? env.storage + user.photo : 'assets/img/user.png'" class="avatar" />
                         </div>
-                        <div class="col-10" [ngStyle]="{'position': 'relative', 'top': '13px'}">
+                        <div class="col-9" [ngStyle]="{'position': 'relative', 'top': '13px'}">
                             {{ user.person.name }} {{ user.person.lastname }}
+                        </div>
+                        <div class="col-1" (click)="addChat()">
+                            <div class="addButton">
+                                <mat-icon>add</mat-icon>
+                            </div>
                         </div>
                     </div>
                     <!-- Search bar -->
@@ -84,30 +90,29 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                                <ng-container *ngIf="actualTab === TABS.CHATS">
-                                    <div class="chats-box">
-                                        <div class="col-12 item-chat" *ngFor="let value of chats"
-                                            (click)="select_chat(value.item.chat_session.id)">
-                                            <div class="row">
-                                                <div class="col-12 col-sm-12 col-lg-2 avatar"
-                                                    *ngIf="value.item.chat_session.attachment !== null">
-                                                    <img [src]="env.storage + value.item.chat_session.attachment" />
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-lg-2 avatar"
-                                                    *ngIf="value.item.chat_session.attachment == null">
-                                                    <img [src]="'assets/img/user.png'" />
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-lg-5">
-                                                    <h4 class="title_chat">{{ value.item.chat_session.name }}</h4>
-                                                    <p class="last_message">{{ value.lastMessage }}</p>
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-lg-4">
-                                                    <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a')}}</p>
-                                                </div>
+                                <div class="chats-box">
+                                    <div class="col-12 item-chat" *ngFor="let value of chats"
+                                        (click)="select_chat(value.item.chat_session.id)">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-lg-2 avatar"
+                                                *ngIf="value.item.chat_session.attachment !== null">
+                                                <img [src]="env.storage + value.item.chat_session.attachment" class='avatar' />
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-lg-2 avatar"
+                                                *ngIf="value.item.chat_session.attachment == null">
+                                                <img [src]="'assets/img/user.png'" />
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-lg-5">
+                                                <h4 class="title_chat">{{ value.item.chat_session.name }}</h4>
+                                                <p class="last_message">{{ value.lastMessage }}</p>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-lg-4">
+                                                <p class="timelog">{{ moment(value.lastDateMessage).format('h:mm a')}}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </ng-container>
+                                </div>
                             </div>
                             <ng-container *ngIf="chatSelected.open">
                                 <!-- Chat -->
@@ -115,8 +120,9 @@
                                     <!-- chat header -->
                                     <div class="row chat-header">
                                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 avatar">
-                                            <img [src]="'assets/img/user.png'" />
-                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">{{ chatSelected.chat_name }}</h4>
+                                            <img [src]="chatSelected.photo ? env.storage + chatSelected.photo : 'assets/img/user.png'" class='avatar' />
+                                            <h4 [ngStyle]="{'font-size': '17px'}" class="ml-4">{{ chatSelected.chat_name
+                                                }}</h4>
                                         </div>
                                     </div>
                                     <!-- Chat content -->
@@ -157,13 +163,14 @@
                                             <form [formGroup]="formMessage" autocomplete="off">
                                                 <mat-form-field class="inputType" appearance="outline">
                                                     <input matInput formControlName="message" name="message" type="text"
-                                                        placeholder="Escribe un mensaje aquí" class="input" required="false"
-                                                        (keyup.enter)="newMessage()" #message>
+                                                        placeholder="Escribe un mensaje aquí" class="input"
+                                                        required="false" (keyup.enter)="newMessage()" #message>
                                                     <mat-icon matSuffix>search</mat-icon>
                                                 </mat-form-field>
                                             </form>
                                         </div>
-                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 mt-4" [ngStyle]="{'cursor': 'pointer'}" (click)="this.openFileModal = true">
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 mt-4"
+                                            [ngStyle]="{'cursor': 'pointer'}" (click)="this.openFileModal = true">
                                             <mat-icon matSuffix>attach_file</mat-icon>
                                         </div>
                                     </div>
