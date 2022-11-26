@@ -19,16 +19,18 @@ export class ModalComponent implements OnChanges {
   @Output() close = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<any>();
   @Output() accept = new EventEmitter<any>();
+  @Output() context = new EventEmitter<any>();
 
   @ViewChild('content') modal: any;
 
   closeResult = '';
   constructor(
     private modalService: NgbModal
-  ) { }
+  ) {}
 
   ngOnChanges(): void {
     if (this.showModal) {
+      this.context.emit(this.modalService);
       this.modalService.open(this.modal, { ariaLabelledBy: 'modal-basic-title', ...this.styles }).result.then(() => {
         this.close.emit();
       }, () => this.close.emit());

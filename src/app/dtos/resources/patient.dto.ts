@@ -27,6 +27,7 @@ export interface PatientGetChatsDTO {
 export interface PatientNewChatDTO {
     sender_id: number;
     name?: string;
+    receiver_id?: number;
 }
 export interface PatientNewMessageDTO {
     sender_id: number;

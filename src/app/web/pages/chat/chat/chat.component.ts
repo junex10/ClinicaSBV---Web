@@ -4,7 +4,7 @@ import { AuthService, PatientChatService, PatientSocketsService } from 'src/app/
 import * as moment from 'moment';
 import { ENVIRONMENT } from 'src/app/shared';
 import SocketEvents from 'src/app/services/sockets/patient/sockets.events';
-import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalOptions, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from 'src/app/helpers';
 import Swal from 'sweetalert2';
 import swalCommon from 'src/app/shared/commons/swal.common';
@@ -47,6 +47,7 @@ export class ChatComponent implements OnInit {
   chats: any;
   scrollDown: number = 0;
   openSearchChat: boolean = false;
+  usersModalContext: NgbModal | null = null;
 
   selecteFileModal: NgbModalOptions = {
     size: 'xl'
@@ -81,7 +82,6 @@ export class ChatComponent implements OnInit {
     this.socket.on(SocketEvents.CHAT.NEW_MESSAGE, (data) => {
       const newLogs = data as { message: string, created_at: string, id: number, sender_id: number };
       this.chatSelected.logs = [...this.chatSelected.logs, newLogs];
-      console.log(data, ' AEGIS ')
     });
   }
 
@@ -96,6 +96,7 @@ export class ChatComponent implements OnInit {
   select_chat = (chat_session_id: number) => {
     this.chat.getLogs({ chat_session_id }).subscribe(
       logs => {
+        console.log((logs as { chats: { photo: string } }).chats.photo)
         this.chatSelected = {
           logs: (logs as { chats: { logs: [] } }).chats.logs,
           chat_name: (logs as { chats: { chat_name: string } }).chats.chat_name,
@@ -194,6 +195,16 @@ export class ChatComponent implements OnInit {
       (data) => {
         this.usersList = (data as { users: [] }).users;
         this.openSearchChat = true;
+      }
+    )
+  }
+
+  getModalUsers = ($event: NgbModal) =>  this.usersModalContext = $event;
+
+  newChat = (item: UsersList) => {
+    this.chat.newChat({ sender_id: this.user.id, name: `${item.person.name} ${item.person?.lastname}`, receiver_id: item.id }).subscribe(
+      (data) => {
+        this.usersModalContext?.dismissAll();
       }
     )
   }

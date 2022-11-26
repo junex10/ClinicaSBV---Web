@@ -32,11 +32,11 @@
         </form>
     </ng-container>
 </app-modal>
-<app-modal title="Usuarios" [showModal]="openSearchChat" (close)="this.openSearchChat = false" [styles]="selecteFileModal">
+<app-modal title="Usuarios" [showModal]="openSearchChat" (close)="this.openSearchChat = false" [styles]="selecteFileModal" (context)="getModalUsers($event)">
     <ng-container>
         <div class="row">
             <ng-container *ngFor="let item of usersList">
-                <div class="user_item row col-12 ml-0 pt-2 pb-2">
+                <div class="user_item row col-12 ml-0 pt-2 pb-2" (click)="newChat(item)">
                     <div class="col-2">
                         <div class="avatar-box">
                             <img [src]="item.photo ? env.storage + item.photo : 'assets/img/user.png'" class="m-auto d-block avatar" />
@@ -126,7 +126,7 @@
                                         </div>
                                     </div>
                                     <!-- Chat content -->
-                                    <div class="row chat-content" #messageContent [scrollTop]="scrollDown">
+                                    <div class="row chat-content" #messageContent [scrollTop]="scrollDown" [ngClass]="{'addDefaultHeight': chatSelected.logs.length === 0}">
                                         <ng-container *ngFor="let chat of chatSelected.logs">
                                             <ng-container *ngIf="chat.sender_id !== user.id">
                                                 <!-- Receiver -->
