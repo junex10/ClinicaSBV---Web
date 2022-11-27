@@ -16,6 +16,16 @@ interface UsersList {
   person: { id: number, name: string, lastname: string }
 }
 
+interface ChatLogs {
+  message: string, 
+  created_at: string, 
+  id: number, 
+  sender_id: number,
+  attachments_chats: {
+    attachment: string;
+  }[];
+}
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -35,7 +45,7 @@ export class ChatComponent implements OnInit {
   env = ENVIRONMENT;
 
   chatSelected = {
-    logs: <{ message: string, created_at: string, id: number, sender_id: number }[]>[],
+    logs: <ChatLogs[]>[],
     chat_name: '',
     photo: <string | null>null,
     open: false,
@@ -57,6 +67,9 @@ export class ChatComponent implements OnInit {
   selectedFiles: { base64: string, index: number, selected: boolean }[] = [];
 
   usersList: UsersList[] = [];
+
+  openImgList: boolean = false;
+  showListFiles: { attachment: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -80,7 +93,7 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.getChats(this.user.id);
     this.socket.on(SocketEvents.CHAT.NEW_MESSAGE, (data) => {
-      const newLogs = data as { message: string, created_at: string, id: number, sender_id: number };
+      const newLogs = data as ChatLogs;
       this.chatSelected.logs = [...this.chatSelected.logs, newLogs];
     });
   }
@@ -93,13 +106,12 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  select_chat = (chat_session_id: number) => {
+  select_chat = (chat_session_id: number, name: string) => {
     this.chat.getLogs({ chat_session_id }).subscribe(
       logs => {
-        console.log((logs as { chats: { photo: string } }).chats.photo)
         this.chatSelected = {
           logs: (logs as { chats: { logs: [] } }).chats.logs,
-          chat_name: (logs as { chats: { chat_name: string } }).chats.chat_name,
+          chat_name: name,
           open: true,
           photo: (logs as { chats: { photo: string } }).chats.photo,
           session_id: chat_session_id
@@ -170,7 +182,7 @@ export class ChatComponent implements OnInit {
     const attachments = this.formMessageWithFile.get('file')?.value.map((item: unknown) => ((item as { blob: Blob })?.blob));
     this.chat.newMessage({ sender_id: this.user.id, message, session_id: this.chatSelected.session_id, attachments, formData: true }).subscribe(
       (data) => {
-        const newLogs = (data as { message: { message: string, created_at: string, id: number, sender_id: number }}).message;
+        const newLogs = (data as { message: ChatLogs }).message;
         this.chatSelected.logs = [...this.chatSelected.logs, { ...newLogs, sender_id: Number(newLogs.sender_id) }];
 
         this.formMessageWithFile.get('message')?.reset();
@@ -207,6 +219,17 @@ export class ChatComponent implements OnInit {
         this.usersModalContext?.dismissAll();
       }
     )
+  }
+
+  openImgModal = (chat: unknown) => {
+    this.openImgList = true;
+    const data = (chat as { attachments_chats: { attachment: string }[] });
+    this.showListFiles = data?.attachments_chats;
+    this.getSelectedFile = this.env.storage + data?.attachments_chats[0].attachment;
+  }
+  selectImgModal = (item: unknown) => {
+    const data = (item as { attachment: string });
+    this.getSelectedFile = this.env.storage + data.attachment;
   }
 
   get search() { return this.form.get('search')?.value }

@@ -50,6 +50,26 @@
         </div>
     </ng-container>
 </app-modal>
+<app-modal 
+    title="Lista de imagenes" 
+    [showModal]="openImgList" 
+    (close)="this.openImgList = false"
+    [styles]="selecteFileModal"
+>
+    <ng-container>
+        <div class="d-block m-auto">
+            <img [src]="getSelectedFile" class="selectedFile">
+        </div>
+        <div class="row">
+            <div class="row col-12 mt-4 mb-4">
+                <div class="col-1" [ngStyle]="{'cursor': 'pointer'}" *ngFor="let item of showListFiles">
+                    <img [src]="env.storage + item.attachment" width="75" height="75"
+                    (click)="selectImgModal(item)">
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</app-modal>
 <div class="g-sidenav-show bg-gray-200 h-100">
     <div class="main-content position-relative max-height-vh-100 h-100">
         <!-- Navbar -->
@@ -92,7 +112,7 @@
                             <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                                 <div class="chats-box">
                                     <div class="col-12 item-chat" *ngFor="let value of chats"
-                                        (click)="select_chat(value.item.chat_session.id)">
+                                        (click)="select_chat(value.item.chat_session.id, value.item.sender.person.name + ' ' + value.item.sender.person.lastname)">
                                         <div class="row">
                                             <div class="col-12 col-sm-12 col-lg-2 avatar"
                                                 *ngIf="value.item.chat_session.attachment !== null">
@@ -103,7 +123,7 @@
                                                 <img [src]="'assets/img/user.png'" />
                                             </div>
                                             <div class="col-12 col-sm-12 col-lg-5">
-                                                <h4 class="title_chat">{{ value.item.chat_session.name }}</h4>
+                                                <h4 class="title_chat">{{ value.item.sender.person.name }} {{ value.item.sender.person.lastname }}</h4>
                                                 <p class="last_message">{{ value.lastMessage }}</p>
                                             </div>
                                             <div class="col-12 col-sm-12 col-lg-4">
@@ -131,6 +151,9 @@
                                             <ng-container *ngIf="chat.sender_id !== user.id">
                                                 <!-- Receiver -->
                                                 <div class="col-12 receiver">
+                                                    <div class="showImage" (click)="openImgModal(chat)">
+                                                        <img [src]="env.storage + chat.attachments_chats[0].attachment" />
+                                                    </div>
                                                     <div class="box-chat-content box-shadow">
                                                         <p class="message">
                                                             {{ chat.message }}
@@ -145,6 +168,9 @@
                                                 <!-- Sender -->
                                                 <div class="col-12 sender">
                                                     <div class="box-chat-content box-shadow">
+                                                        <div class="showImage" (click)="openImgModal(chat)">
+                                                            <img [src]="env.storage + chat.attachments_chats[0].attachment" />
+                                                        </div>
                                                         <p class="message">
                                                             {{ chat.message }}
                                                             <span class="message-timelog">{{
