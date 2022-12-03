@@ -84,7 +84,7 @@
         <div class="container-fluid px-2 px-md-4" [ngStyle]="{'position': 'relative', 'top': '20px'}">
             <div class="col-12 mt-4">
                 <div class="card card-plain h-100">
-                    <div class="row col-4 mt-2" [ngStyle]="{'margin-left': '0px'}">
+                    <div class="row col-12 col-sm-12 col-lg-4 col-md-4 mt-2" [ngStyle]="{'margin-left': '0px'}">
                         <div class="col-2">
                             <img [src]="user.photo ? env.storage + user.photo : 'assets/img/user.png'" class="avatar" />
                         </div>
@@ -112,14 +112,14 @@
                             <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                                 <div class="chats-box">
                                     <div class="col-12 item-chat" *ngFor="let value of chats"
-                                        (click)="select_chat(value.item.chat_session.id, value.item.sender.person.name + ' ' + value.item.sender.person.lastname)">
+                                        (click)="select_chat(value.item.chat_session.id, value.item.sender.person.name + ' ' + value.item.sender.person.lastname, value.item.sender.photo)">
                                         <div class="row">
                                             <div class="col-12 col-sm-12 col-lg-2 avatar"
-                                                *ngIf="value.item.chat_session.attachment !== null">
-                                                <img [src]="env.storage + value.item.chat_session.attachment" class='avatar' />
+                                                *ngIf="value.item.sender.photo !== null">
+                                                <img [src]="env.storage + value.item.sender.photo" class='avatar' />
                                             </div>
                                             <div class="col-12 col-sm-12 col-lg-2 avatar"
-                                                *ngIf="value.item.chat_session.attachment == null">
+                                                *ngIf="value.item.sender.photo == null">
                                                 <img [src]="'assets/img/user.png'" />
                                             </div>
                                             <div class="col-12 col-sm-12 col-lg-5">
@@ -151,9 +151,11 @@
                                             <ng-container *ngIf="chat.sender_id !== user.id">
                                                 <!-- Receiver -->
                                                 <div class="col-12 receiver">
-                                                    <div class="showImage" (click)="openImgModal(chat)">
-                                                        <img [src]="env.storage + chat.attachments_chats[0].attachment" />
-                                                    </div>
+                                                    <ng-container *ngIf="chat.attachments_chats.length > 0">
+                                                        <div class="showImage" (click)="openImgModal(chat)">
+                                                            <img [src]="env.storage + chat.attachments_chats[0].attachment" />
+                                                        </div>
+                                                    </ng-container>
                                                     <div class="box-chat-content box-shadow">
                                                         <p class="message">
                                                             {{ chat.message }}
@@ -168,9 +170,11 @@
                                                 <!-- Sender -->
                                                 <div class="col-12 sender">
                                                     <div class="box-chat-content box-shadow">
-                                                        <div class="showImage" (click)="openImgModal(chat)">
-                                                            <img [src]="env.storage + chat.attachments_chats[0].attachment" />
-                                                        </div>
+                                                        <ng-container *ngIf="chat.attachments_chats.length > 0">
+                                                            <div class="showImage" (click)="openImgModal(chat)">
+                                                                <img [src]="env.storage + chat.attachments_chats[0].attachment" />
+                                                            </div>
+                                                        </ng-container>
                                                         <p class="message">
                                                             {{ chat.message }}
                                                             <span class="message-timelog">{{

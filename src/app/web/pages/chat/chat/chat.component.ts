@@ -94,6 +94,7 @@ export class ChatComponent implements OnInit {
     this.getChats(this.user.id);
     this.socket.on(SocketEvents.CHAT.NEW_MESSAGE, (data) => {
       const newLogs = data as ChatLogs;
+      console.log(data, ' SENDED ')
       this.chatSelected.logs = [...this.chatSelected.logs, newLogs];
     });
   }
@@ -106,14 +107,15 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  select_chat = (chat_session_id: number, name: string) => {
+  select_chat = (chat_session_id: number, name: string, photo: string) => {
     this.chat.getLogs({ chat_session_id }).subscribe(
       logs => {
+        console.log(logs, ' AQUI ')
         this.chatSelected = {
           logs: (logs as { chats: { logs: [] } }).chats.logs,
           chat_name: name,
           open: true,
-          photo: (logs as { chats: { photo: string } }).chats.photo,
+          photo,
           session_id: chat_session_id
         };
         setTimeout(() => this.scrollDown = this.messageContent.nativeElement.scrollHeight, 600);
@@ -215,7 +217,8 @@ export class ChatComponent implements OnInit {
 
   newChat = (item: UsersList) => {
     this.chat.newChat({ sender_id: this.user.id, name: `${item.person.name} ${item.person?.lastname}`, receiver_id: item.id }).subscribe(
-      (data) => {
+      () => {
+        this.getChats(this.user.id);
         this.usersModalContext?.dismissAll();
       }
     )

@@ -9,6 +9,7 @@ import { ProfileModule } from './profile/profile.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PatientModule } from 'src/app/web/pages/patient/patient.module';
 import { ChatModule } from './chat/chat.module';
+import { DoctorModule } from 'src/app/web/pages/doctor/doctor.module';
 
 const routes: Routes = [
   {
@@ -31,11 +32,16 @@ const routes: Routes = [
   {
     path: 'chat',
     loadChildren: () => import('src/app/web/pages/chat/chat.module').then(mod => mod.ChatModule)
+  },
+  {
+    path: 'doctor',
+    loadChildren: () => import('src/app/web/pages/doctor/doctor.module').then(mod => mod.DoctorModule)
   }
 ];
 
 @NgModule({
   declarations: [
+
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -46,7 +52,8 @@ const routes: Routes = [
     // Modules
     ProfileModule,
     PatientModule,
-    ChatModule
+    ChatModule,
+    DoctorModule
   ]
 })
 export class PagesModule { }

@@ -179,6 +179,24 @@ export const MENU = [
         route: '/chats'
       },
       {
+        name: 'Citas',
+        icon: "fa-solid fa-files",
+        selected: false,
+        multiple: true,
+        subMenu: [
+          {
+            name: 'Listado de citas',
+            icon: "fa-solid fa-files",
+            route: '/doctor/appointments/appointments-list'
+          },
+          {
+            name: 'Estadisticas',
+            icon: "fa-solid fa-files",
+            route: '/doctor/appointments/statistics'
+          }
+        ],
+      },
+      {
         name: 'Salir',
         icon: 'fa-solid fa-arrow-right-from-bracket',
         selected: false,
