@@ -4,3 +4,9 @@ export interface PaginationDTO {
         rows: unknown[]
     }
 }
+export interface DataTableDTO {
+    data: any[];
+    total: number;
+    header: string[];
+    page: number;
+}

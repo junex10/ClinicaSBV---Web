@@ -60,7 +60,8 @@ import {
 } from './resources/patient.dto';
 
 import {
-    PaginationDTO
+    PaginationDTO,
+    DataTableDTO
 } from './resources/general.dto';
 
 export {
@@ -85,6 +86,7 @@ export {
     GetDatesToHideDTO,
     RegisterAppointmentDTO,
     PaginationDTO,
+    DataTableDTO,
     PatientGetChatsDTO,
     PatientNewChatDTO,
     PatientNewMessageDTO,

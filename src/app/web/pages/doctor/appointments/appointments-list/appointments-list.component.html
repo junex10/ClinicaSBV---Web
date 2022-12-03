@@ -1,1 +1,30 @@
 <app-header></app-header>
+<div class="g-sidenav-show bg-gray-200 h-100">
+    <div class="main-content position-relative max-height-vh-100 h-100">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+            navbar-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                    <h1 class="font-weight-bolder mb-0" [ngStyle]="{'font-size': '20px'}">Listado de Citas Médicas
+                    </h1>
+                </nav>
+            </div>
+        </nav>
+        <div class="container-fluid px-2 px-md-4" [ngStyle]="{'position': 'relative', 'top': '100px'}">
+            <div class="col-12">
+                <form [formGroup]="filter" autocomplete="off">
+                    <mat-form-field class="input" appearance="standard">
+                        <mat-label>Filtro</mat-label>
+                        <mat-select formControlName="formOptions" (selectionChange)="getAppointments(appointmentsTable.page, getFormOptions)" required>
+                            <mat-option *ngFor="let item of options"
+                                [value]="item.value">
+                                {{ item.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,7 @@ import {
     IPATIENTCHAT
 } from './patient/patient.interface';
 import { IPATIENTS_APPOINTMENTS } from './patient/appointments.interface';
+import { IDOCTOR_APPOINTMENTS } from './doctor/appointments.interface';
 
 export {
     IAUTH,
@@ -14,5 +15,7 @@ export {
 
     IPATIENTS,
     IPATIENTS_APPOINTMENTS,
-    IPATIENTCHAT
+    IPATIENTCHAT,
+
+    IDOCTOR_APPOINTMENTS
 }
